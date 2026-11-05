@@ -1,0 +1,5 @@
+node_modules/
+kapsula/out/*.mp4
+kapsula/out/*.wav
+kapsula/checks/*
+!kapsula/checks/.gitkeep

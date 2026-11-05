@@ -1,0 +1,16 @@
+{
+  "fps": 30,
+  "total": 900,
+  "fadeStart": 885,
+  "fadeLen": 15,
+  "turn": 244,
+  "text": {
+    "line1": "ВЁДРА — ЭТО ЗАРПЛАТА.",
+    "line2": "ТРУБА — ЭТО ДОХОД.",
+    "line2Start": 672,
+    "charsPerFrame": 1.45,
+    "charFade": 3,
+    "dimTo": 0.65,
+    "dimLen": 9
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "fps": 30,
+  "total": 900,
+  "fadeStart": 885,
+  "fadeLen": 15,
+  "turn": 700,
+  "text": {
+    "line1": "КТО-ТО ПРИДЁТ И ОТКРОЕТ ДВЕРЬ.",
+    "line2": "НИКТО НЕ ПРИДЁТ. ЭТО АВТОМАТ.",
+    "line2Start": 701,
+    "charsPerFrame": 1.45,
+    "charFade": 3,
+    "dimTo": 0.65,
+    "dimLen": 9
+  }
+}
