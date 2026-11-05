@@ -27,7 +27,7 @@ export const DOOR = { x0: -0.15, x1: 0.55, h: 1.95 };
 export const HATCH = { x0: 0.75, x1: 1.2, y0: 0.03, y1: 0.43, cx: 0.975 };
 export const LAMP = { x: 1.34, y: 0.3 };                                    // янтарная лампа справа от люка (единственный акцент)
 export const LIGHT = { x0: -0.95, x1: 0.95, y: 2.18 };                       // свет, который никогда не гаснет
-export const MARK = { y0: 1.17, y1: 1.43, x: (k: number) => (k === 4 ? 0.91 : 0.8 + 0.06 * k - (k > 4 ? 0.0 : 0)) };
+export const MARK = { y0: 1.17, y1: 1.43, x: (k: number) => (k === 4 ? 1.01 : 0.9 + 0.06 * k) };
 export const ZH = -0.75;                                                     // плоскость героя
 export const BOWL_SPOT: [number, number, number] = [HATCH.cx, 0.0, -0.98];   // миска перед люком
 export const BOWL_IN = -1.5;                                                 // миска внутри люка (z)
