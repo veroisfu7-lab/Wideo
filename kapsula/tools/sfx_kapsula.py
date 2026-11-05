@@ -139,7 +139,7 @@ for e in EV:
         mx.put(mx.latch(1.6), f, 6, p, "jam_clank")
         mx.put(mx.bowl_clink(1.3), f, 3, p, "jam_bowl_ring")
         mx.put(mx.boom(180, 50, 8, 0.35), f, -2, p, "jam_low")
-    elif k == "grind": mx.put(mx.grind(48), f, 3, p, "grind")
+    elif k == "grind": mx.put(mx.grind(48), f, 6, p, "grind")
     elif k == "alarm": mx.put(mx.beep(48), f, -4, pan(1.34), "alarm_beeps")
     elif k == "jamClank2": mx.put(mx.latch(1.2), f, 7, p, "jam_shove"); mx.put(mx.bowl_clink(0.9), f, 0, p, "jam_shove_ring")
     elif k == "powerDown": mx.put(mx.power_down(18), f, 10, p, "power_down")
