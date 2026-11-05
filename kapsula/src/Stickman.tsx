@@ -107,8 +107,8 @@ const inkFade = (op: number) => {
 export const Stickman: React.FC<{ j: Joints; z: number; near: string; far: string; mirror?: boolean; order?: number; thin?: number; op?: number; children?: React.ReactNode }> =
   ({ j, z, near, far, mirror = false, order, thin = 1, op = 1, children }) => {
     const q = Math.round(op * 20) / 20;
-    const mN = mirror ? mirrorMat(near, 0.16 * q) : q < 1 ? fadeMat(near, q) : flat(near);
-    const mF = mirror ? mirrorMat(far, 0.16 * q) : q < 1 ? fadeMat(far, q) : flat(far);
+    const mN = mirror ? mirrorMat(near, 0.2 * q, 0.12) : q < 1 ? fadeMat(near, q) : flat(near);
+    const mF = mirror ? mirrorMat(far, 0.2 * q, 0.12) : q < 1 ? fadeMat(far, q) : flat(far);
     const ink = q < 1 ? inkFade(q) : INK;
     const hull = !mirror, ord = order ?? (mirror ? 1 : 2);
     const LR = LIMB_R * thin, AR = ARM_R * thin, TR = TORSO_R * thin;

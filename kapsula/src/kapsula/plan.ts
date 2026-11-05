@@ -46,8 +46,8 @@ export const E = {
   days: [420, 456, 492, 528, 564, 600], xf: 8,
   // день 7 и поворот
   lamp7: 672, flap7: [676, 686], arm7: [686, 700], listen7: [684, 698],
-  armLook: [700, 712], armBack: [712, 732], grab7: [714, 726], slot7: [726, 742], flapClose: [732, 752],
-  jam: 750, grind: [752, 800], lastShove: 790, powerDown: [800, 816], sitBack: [764, 786],
+  armLook: [700, 720], armBack: [722, 742], grab7: [726, 738], slot7: [738, 752], flapClose: [744, 762],
+  jam: 762, grind: [764, 810], lastShove: 800, powerDown: [810, 826], sitBack: [776, 798],
 };
 // индекс тайм-лапса (−1 — основной герой день 1, 0..4 — дни 2..6, 5 — день 7 и дальше)
 export const dayIndex = (f: number) => { const d = E.days; if (f < d[0]) return -1; for (let k = 1; k < d.length; k++) if (f < d[k]) return k - 1; return 5; };
@@ -56,7 +56,7 @@ export const marksAt = (f: number) => {             // сколько черт �
   if (f < E.days[0]) return { n: 1, last: seg(f, E.scratch1[0] + 6, E.scratch1[1] - 4) };
   const k = dayIndex(f);                             // день k+2 → черт k+2
   const d0 = E.days[Math.min(k, 5)];
-  if (k >= 5) return { n: 6, last: 1 };
+  if (k >= 5) return { n: 7, last: seg(f, E.days[5] + 12, E.days[5] + 18, (t) => t) };
   return { n: k + 2, last: seg(f, d0 + 12, d0 + 18, (t) => t) };
 };
 
@@ -114,7 +114,7 @@ const mixPose = (a: Pose, b: Pose, t: number): Pose => t <= 0 ? a : t >= 1 ? b :
 // ------------------------------------------------------------------ готовые позы
 // лежит на спине на лежаке, колени согнуты, голова у стены слева (смотрит «вправо» = s +1)
 const LIE: Pose = { pelvis: [-0.55, COT.top + 0.09], lean: -Math.PI / 2, footN: [-0.17, COT.top + 0.06], footF: [-0.21, COT.top + 0.06],
-  handN: [-0.62, COT.top + 0.1], handF: [-0.7, COT.top + 0.1], headOff: [0, 0.02] };
+  handN: [-0.52, COT.top + 0.15], handF: [-0.58, COT.top + 0.14], headOff: [0, 0.02] };
 // сидит на краю лежака, ступни на полу
 const SITCOT = (x = -0.45, lean = 0.05, head: V2 = [0, 0]): Pose => {
   const pel: V2 = [x, COT.top + 0.09], sh = shoulderOf(pel, lean, 1);
@@ -133,7 +133,7 @@ const STAND = (x: number, s: number, lean = 0.03): Pose => {
 
 // ------------------------------------------------------------------ герой дня 1 (кадры 0–428)
 export const BOWL_HAND_Z = ZH + 0.2;
-export type Hero = { pose: Pose; s: number; thin: number; op: number; bowl?: { p: [number, number, number]; tilt: number } };
+export type Hero = { pose: Pose; s: number; thin: number; op: number; noMirror?: boolean; bowl?: { p: [number, number, number]; tilt: number } };
 function heroDay1(f: number): Hero {
   const s = facing(f);
   const nA = footAt("N", f), fA = footAt("F", f);
@@ -189,7 +189,7 @@ function heroDay1(f: number): Hero {
     const held = f >= E.grab1[1] && f < E.put1[1];
     if (held) bowl = { p: [bowlC[0] + 0.09, bowlC[1] - 0.07, lerp(BOWL_SPOT[2], BOWL_HAND_Z, Math.min(lift * 3, 1))], tilt: 0.5 * lift };
   }
-  return { pose, s, thin: 1, op: 1, bowl };
+  return { pose, s, thin: 1, op: 1, bowl, noMirror: f < E.sitUp[1] - 4 };
 }
 
 // ------------------------------------------------------------------ дни 2–6: застывшие «картины» (растворяются одна в другую)
@@ -199,12 +199,12 @@ function tableau(k: number, f: number): Hero {
   switch (k) {
     case 0: { // день 2: сидит на лежаке, обхватив колени
       const pel: V2 = [-0.95, COT.top + 0.09], lean = 0.25 + 0.03 * Math.sin(t * 0.18);
-      return { pose: { pelvis: pel, lean, footN: [-0.56, COT.top + 0.05], footF: [-0.6, COT.top + 0.05], handN: [-0.62, COT.top + 0.42], handF: [-0.66, COT.top + 0.38], headOff: [0.02, -0.03] }, s: 1, thin: thinOf(0), op: 1 };
+      return { pose: { pelvis: pel, lean, footN: [-0.56, COT.top + 0.05], footF: [-0.6, COT.top + 0.05], handN: [-0.62, COT.top + 0.42], handF: [-0.66, COT.top + 0.38], headOff: [0.02, -0.03] }, s: 1, thin: thinOf(0), op: 1, noMirror: true };
     }
     case 1: { // день 3: отжимается до отказа
       const u = 0.5 - 0.5 * Math.cos(t * (2 * Math.PI / 17));
-      const handX = 0.42, sh: V2 = [handX - 0.03, lerp(0.56, 0.3, u)];
-      const foot: V2 = [-0.95, 0.04];
+      const handX = 1.08, sh: V2 = [handX - 0.03, lerp(0.56, 0.3, u)];
+      const foot: V2 = [0.0, 0.05];
       const ang = Math.atan2(sh[0] - foot[0], sh[1] - foot[1]);
       const pel: V2 = [sh[0] - Math.sin(ang) * 0.5, sh[1] - Math.cos(ang) * 0.5];
       return { pose: { pelvis: pel, lean: ang, footN: foot, footF: [foot[0] - 0.03, 0.04], handN: [handX, 0.03], handF: [handX - 0.04, 0.03], headOff: [0.0, 0.0] }, s: 1, thin: thinOf(1), op: 1 };
@@ -237,11 +237,11 @@ function heroDay7(f: number): Hero {
   const up = seg(f, E.flap7[0] + 2, E.flap7[0] + 10);
   pose = mixPose(pose, KNEEL(0.5, 0.2, undefined, undefined, [0.03, 0.0], 0.04), up);
   const lw = seg(f, E.listen7[0], E.listen7[1]);
-  const LISTEN = KNEEL(0.42, 1.18, [0.64, 0.07], [0.58, 0.07], [0.02, -0.11], 0.0);
+  const LISTEN = KNEEL(0.35, 1.45, [0.6, 0.06], [0.54, 0.06], [0.05, -0.12], 0.05);
   pose = mixPose(pose, LISTEN, lw);
   // щелчок реле: замер, потом выпрямился (уже белый)
   const rise = seg(f, TURN + 4, TURN + 14);
-  pose = mixPose(pose, KNEEL(0.5, 0.55, [0.68, 0.14], [0.62, 0.12], [0.04, 0.0], 0.0), rise);
+  pose = mixPose(pose, KNEEL(0.45, 0.6, [0.58, 0.14], [0.52, 0.12], [0.04, 0.0], 0.0), rise);
   // берёт миску и ставит её ребром в проём
   let bowl: Hero["bowl"];
   const g = seg(f, E.grab7[0], E.grab7[1]);
@@ -331,7 +331,7 @@ export const lampAt = (f: number) => {
   return v;
 };
 // свечение изнутри люка после заклинивания (диод манипулятора)
-export const innerGlow = (f: number) => (f < E.jam ? (armState(f).on ? 0.6 : 0) : 0.35 + 0.25 * Math.sin((f - E.jam) * 0.21));
+export const innerGlow = (f: number) => (f < E.jam ? (armState(f).on ? 1.6 : 0) : 0.35 + 0.25 * Math.sin((f - E.jam) * 0.21));
 
 // ------------------------------------------------------------------ камера
 export const camState = (f: number) => {
@@ -363,7 +363,7 @@ export function events() {
     if (k === 1) for (let r = 0; r < 2; r++) add(d + 8 + r * 17, "pushup", 0.0);
     if (k === 4) add(d + 20, "eat", 0.8);
   });
-  add(E.days[5], "timeWhoosh");
+  add(E.days[5], "timeWhoosh"); add(E.days[5] + 12, "scratchShort", MARK.x(6));
   add(E.lamp7, "lampOn", LAMP.x); add(E.flap7[0], "hiss", HATCH.cx); add(E.flap7[0] + 8, "flapUp", HATCH.cx);
   add(E.flap7[0] + 4, "cloth", 0.5);
   add(E.arm7[0] - 4, "servo", HATCH.cx); add(E.arm7[1] - 2, "bowlSlide", HATCH.cx);

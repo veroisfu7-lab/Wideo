@@ -33,7 +33,7 @@ const roomMat = (alb: string, top: string, k = 1.0) => {
   m.stencilWrite = true; m.stencilRef = 0; m.stencilFunc = THREE.AlwaysStencilFunc; m.stencilZPass = THREE.ReplaceStencilOp;
   return m;
 };
-const WALL = roomMat("#4A474B", "#5C595D"), COTM = roomMat("#6E6B6F", "#9A979B"), METAL = roomMat("#5E5B5F", "#8C898D"), ARM = roomMat("#77747A", "#A4A1A5", 1.1);
+const WALL = roomMat("#4A474B", "#5C595D"), COTM = roomMat("#6E6B6F", "#9A979B"), METAL = roomMat("#2A272B", "#3A373B", 0.6), ARM = roomMat("#3A373B", "#5C595D", 0.7);
 const DOORM = roomMat("#524F53", "#5C595D");
 const EDGE = flat("#8C898D"), EDGE_DIM = flat("#5C595D"), SEAM = flat("#0B090C"), SCRATCH = flat("#9C999E");
 // глянцевый пол: почти чёрный, светлее у задней стены под светом; пишет stencil = 1 (для отражений героя)
@@ -131,13 +131,13 @@ const Arm: React.FC<{ f: number }> = ({ f }) => {
   const led = f >= TURN && f < E.armLook[1] ? (Math.floor((f - TURN) / 2) % 2 ? 0.25 : 1) : 0.8;
   ledMat.color.copy(lin(AMBER)).multiplyScalar(0.4 + 2.2 * led);
   const z = a.z, len = -1.95 - z;
-  return (<group position={[HATCH.cx, 0.13 + 0.04 * a.look, 0]}>
+  return (<group position={[HATCH.cx, 0.15 + 0.04 * a.look, 0]}>
     <Box x={[-0.025, 0.025]} y={[-0.02, 0.03]} z={[-1.95, z - 0.06]} mat={METAL} />
-    <group position={[0, 0, z]} rotation={[0.25 * a.look, 0.55 * a.look, 0]}>
+    <group position={[0, 0, z]} rotation={[0.25 * a.look, 0.55 * a.look, 0]} scale={1.6}>
       <Box x={[-0.1, 0.1]} y={[-0.03, 0.06]} z={[-0.07, 0.05]} mat={ARM} />
       <Box x={[-0.095, -0.07]} y={[-0.11, -0.03]} z={[0.0, 0.035]} mat={ARM} />
       <Box x={[0.07, 0.095]} y={[-0.11, -0.03]} z={[0.0, 0.035]} mat={ARM} />
-      <mesh material={ledMat} position={[0.0, 0.015, 0.053]} renderOrder={3}><sphereGeometry args={[0.022, 16, 10]} /></mesh>
+      <mesh material={ledMat} position={[0.0, 0.015, 0.053]} renderOrder={3}><sphereGeometry args={[0.026, 16, 10]} /></mesh>
       <Halo p={[0, 0.015, 0.07]} w={0.5} k={0.35 * led} mat={HALO_LED} order={9} />
     </group>
     {len < 0 ? null : null}
@@ -214,7 +214,7 @@ export const KapsulaScene: React.FC = () => {
     <color attach="background" args={["#010002"]} />
     <CamRig f={f} />
     {!hidden("room") ? <Room /> : null}
-    {hs.map((h, i) => <Stickman key={"m" + i} j={solveFacing(h.pose, h.s)} z={ZH} near={near} far={far} mirror order={-1} thin={h.thin} op={h.op} />)}
+    {hs.map((h, i) => h.noMirror ? null : <Stickman key={"m" + i} j={solveFacing(h.pose, h.s)} z={ZH} near={near} far={far} mirror order={-1} thin={h.thin} op={h.op} />)}
     <Hatch f={f} />
     <Arm f={f} />
     <Lamp f={f} />
@@ -223,7 +223,7 @@ export const KapsulaScene: React.FC = () => {
     {bf.on ? <Bowl p={[BOWL_SPOT[0], 0, bf.z]} full={bf.full} upright={bf.upright} /> : null}
     {hs.map((h, i) => h.bowl ? <Bowl key={"b" + i} p={h.bowl.p} tilt={h.bowl.tilt} full={f < E.eat1[0] + 20 || f >= E.days[0]} /> : null)}
     {hs.map((h, i) => <Stickman key={"h" + i} j={solveFacing(h.pose, h.s)} z={ZH} near={near} far={far} thin={h.thin} op={h.op} />)}
-    {glowHero > 0.005 ? <Halo p={[j0.neck[0], j0.neck[1] - 0.1, ZH + 0.3]} w={2.2} h={2.6} k={glowHero} mat={HALO_HERO} /> : null}
+    {glowHero > 0.005 ? <Halo p={[j0.neck[0], j0.neck[1] + 0.05, ZH + 0.3]} w={2.0} h={1.9} k={glowHero} mat={HALO_HERO} /> : null}
     {props.bloom === false ? null : (
       <EffectComposer multisampling={props.ms ?? 8} stencilBuffer>
         <Bloom luminanceThreshold={0.6} luminanceSmoothing={0.3} intensity={0.13} mipmapBlur radius={0.5} />
