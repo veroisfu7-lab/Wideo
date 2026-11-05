@@ -240,7 +240,7 @@ function heroDay7(f: number): Hero {
   const LISTEN = KNEEL(0.35, 1.45, [0.6, 0.06], [0.54, 0.06], [0.05, -0.12], 0.05);
   pose = mixPose(pose, LISTEN, lw);
   // щелчок реле: замер, потом выпрямился (уже белый)
-  const rise = seg(f, TURN + 4, TURN + 14);
+  const rise = seg(f, TURN + 5, TURN + 24, (t) => 1 - Math.pow(1 - t, 2.2)) - 0.04 * bump(f, TURN + 2, TURN + 7);   // плавно, с короткой антиципацией
   pose = mixPose(pose, KNEEL(0.45, 0.6, [0.58, 0.14], [0.52, 0.12], [0.04, 0.0], 0.0), rise);
   // берёт миску и ставит её ребром в проём
   let bowl: Hero["bowl"];

@@ -46,7 +46,7 @@ glide = np.maximum(55, 260 * np.exp(-tt * 5.5))
 hit = np.zeros(n); hit[k] = np.sin(2 * np.pi * np.cumsum(glide) / SR) * np.exp(-tt / 0.9) * 0.9
 # воздух: тёмный шум, тихо
 air = lp(rng.standard_normal(n), 500) * 0.25 * (0.6 + 0.4 * post)
-mono = pad * 0.5 + sub + hit + air
+mono = pad * 0.5 + sub + air   # удар поворота — только в SFX (бум), чтобы пик был ровно на кадре 700
 # конец: гаснет вместе с картинкой (последние 0.5 с)
 mono *= 1 - ramp(DUR - 0.5, DUR)
 L = mono + 0.15 * lp(np.roll(pad, 480), 700); R = mono + 0.15 * lp(np.roll(pad, -480), 700)
