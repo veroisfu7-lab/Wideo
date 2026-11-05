@@ -1,0 +1,3 @@
+frame,t,onset,tot_jump_db,peak_band,band_jump_db,bands_up,dur_f,flat,vis_ratio
+54,1.8,10.3,0.7,sub,20.1,"['sub', 'bass', 'presence', 'air']",29,0.001,1.42
+306,10.2,9.0,-0.1,air,10.0,['air'],26,0.001,1.09

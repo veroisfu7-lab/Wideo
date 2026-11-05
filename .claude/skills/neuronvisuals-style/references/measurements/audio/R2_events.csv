@@ -1,0 +1,6 @@
+frame,t,onset,tot_jump_db,peak_band,band_jump_db,bands_up,dur_f,flat,vis_ratio
+1,0.03,6.8,7.8,himid,11.5,"['mid', 'himid', 'presence', 'air']",60,0.001,1.17
+29,0.97,7.2,1.1,sub,24.8,"['sub', 'bass', 'presence', 'air']",3,0.001,1.25
+114,3.8,6.4,0.0,air,7.2,"['bass', 'air']",1,0.0,1.12
+148,4.93,10.9,8.6,bass,20.4,"['sub', 'bass', 'presence', 'air']",3,0.0,1.6
+177,5.9,4.9,1.6,bass,18.1,"['sub', 'bass']",2,0.0,1.38

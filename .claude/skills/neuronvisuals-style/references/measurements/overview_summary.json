@@ -1,0 +1,444 @@
+{
+ "R1": {
+  "file": "4003850951743456927-1@uasaverbot.mp4",
+  "frames": 332,
+  "mean_diff": 6.077,
+  "cut_candidates_histdist_gt_0_25": [],
+  "top_hist_jumps": [
+   [
+    2,
+    0.041
+   ],
+   [
+    322,
+    0.039
+   ],
+   [
+    324,
+    0.038
+   ],
+   [
+    325,
+    0.036
+   ],
+   [
+    328,
+    0.033
+   ],
+   [
+    323,
+    0.031
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [],
+  "motion_peaks_p90": [
+   39,
+   56,
+   65,
+   73,
+   90,
+   95,
+   100,
+   106,
+   128,
+   148,
+   168,
+   186,
+   204,
+   220,
+   241
+  ],
+  "lum_first": 1.0,
+  "lum_last": 1.0
+ },
+ "R2": {
+  "file": "4004538025739999124-1@uasaverbot.mp4",
+  "frames": 351,
+  "mean_diff": 2.268,
+  "cut_candidates_histdist_gt_0_25": [
+   90,
+   92,
+   93
+  ],
+  "top_hist_jumps": [
+   [
+    92,
+    0.393
+   ],
+   [
+    93,
+    0.359
+   ],
+   [
+    90,
+    0.297
+   ],
+   [
+    95,
+    0.175
+   ],
+   [
+    91,
+    0.164
+   ],
+   [
+    344,
+    0.12
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [
+   [
+    205,
+    212
+   ],
+   [
+    277,
+    284
+   ],
+   [
+    293,
+    299
+   ],
+   [
+    322,
+    335
+   ]
+  ],
+  "motion_peaks_p90": [
+   32,
+   46,
+   62,
+   80,
+   86,
+   92,
+   126,
+   130,
+   254,
+   344
+  ],
+  "lum_first": 20.55,
+  "lum_last": 0.99
+ },
+ "R3": {
+  "file": "4017279388839468755-1@uasaverbot.mp4",
+  "frames": 348,
+  "mean_diff": 1.842,
+  "cut_candidates_histdist_gt_0_25": [],
+  "top_hist_jumps": [
+   [
+    239,
+    0.042
+   ],
+   [
+    241,
+    0.041
+   ],
+   [
+    244,
+    0.039
+   ],
+   [
+    253,
+    0.032
+   ],
+   [
+    251,
+    0.026
+   ],
+   [
+    246,
+    0.024
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [
+   [
+    215,
+    238
+   ],
+   [
+    254,
+    333
+   ]
+  ],
+  "motion_peaks_p90": [
+   29,
+   35,
+   42,
+   70,
+   82
+  ],
+  "lum_first": 13.65,
+  "lum_last": 1.0
+ },
+ "R4": {
+  "file": "4021563282761731070-1@uasaverbot.mp4",
+  "frames": 492,
+  "mean_diff": 0.878,
+  "cut_candidates_histdist_gt_0_25": [],
+  "top_hist_jumps": [
+   [
+    482,
+    0.086
+   ],
+   [
+    479,
+    0.075
+   ],
+   [
+    480,
+    0.064
+   ],
+   [
+    483,
+    0.063
+   ],
+   [
+    481,
+    0.063
+   ],
+   [
+    478,
+    0.06
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [
+   [
+    19,
+    24
+   ],
+   [
+    101,
+    108
+   ],
+   [
+    164,
+    169
+   ],
+   [
+    227,
+    233
+   ],
+   [
+    271,
+    289
+   ],
+   [
+    292,
+    299
+   ],
+   [
+    342,
+    348
+   ],
+   [
+    379,
+    389
+   ],
+   [
+    427,
+    449
+   ],
+   [
+    451,
+    474
+   ]
+  ],
+  "motion_peaks_p90": [
+   78,
+   142,
+   180,
+   222,
+   355,
+   371,
+   402,
+   405,
+   412,
+   422,
+   484
+  ],
+  "lum_first": 30.44,
+  "lum_last": 0.03
+ },
+ "R5": {
+  "file": "Every family has someone running on empty so everyone else can run on full.Usually it’s the one.mp4",
+  "frames": 374,
+  "mean_diff": 0.666,
+  "cut_candidates_histdist_gt_0_25": [],
+  "top_hist_jumps": [
+   [
+    366,
+    0.112
+   ],
+   [
+    365,
+    0.086
+   ],
+   [
+    361,
+    0.075
+   ],
+   [
+    360,
+    0.072
+   ],
+   [
+    364,
+    0.057
+   ],
+   [
+    362,
+    0.056
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [
+   [
+    58,
+    119
+   ],
+   [
+    134,
+    147
+   ]
+  ],
+  "motion_peaks_p90": [
+   33,
+   39,
+   166,
+   214,
+   251,
+   281,
+   287,
+   293,
+   299,
+   309,
+   364
+  ],
+  "lum_first": 26.16,
+  "lum_last": 1.0
+ },
+ "R6": {
+  "file": "If you live to 80, you get about 4,000 weeks. Most of us spend them like the supply is endless.M.mp4",
+  "frames": 393,
+  "mean_diff": 2.223,
+  "cut_candidates_histdist_gt_0_25": [],
+  "top_hist_jumps": [
+   [
+    384,
+    0.104
+   ],
+   [
+    382,
+    0.091
+   ],
+   [
+    383,
+    0.087
+   ],
+   [
+    381,
+    0.076
+   ],
+   [
+    380,
+    0.05
+   ],
+   [
+    385,
+    0.048
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [
+   [
+    274,
+    279
+   ],
+   [
+    346,
+    377
+   ]
+  ],
+  "motion_peaks_p90": [
+   53,
+   57,
+   171,
+   211
+  ],
+  "lum_first": 28.41,
+  "lum_last": 1.0
+ },
+ "R7": {
+  "file": "Perfectionism never skips the flop. It only postpones it.The first pancake is how the pan, the b.mp4",
+  "frames": 408,
+  "mean_diff": 1.032,
+  "cut_candidates_histdist_gt_0_25": [],
+  "top_hist_jumps": [
+   [
+    402,
+    0.225
+   ],
+   [
+    401,
+    0.171
+   ],
+   [
+    400,
+    0.142
+   ],
+   [
+    399,
+    0.12
+   ],
+   [
+    397,
+    0.118
+   ],
+   [
+    398,
+    0.11
+   ]
+  ],
+  "pauses_diff_lt_0_3_min6f": [
+   [
+    0,
+    8
+   ],
+   [
+    15,
+    20
+   ],
+   [
+    225,
+    234
+   ],
+   [
+    291,
+    299
+   ],
+   [
+    371,
+    392
+   ]
+  ],
+  "motion_peaks_p90": [
+   30,
+   96,
+   104,
+   110,
+   117,
+   130,
+   143,
+   150,
+   157,
+   181,
+   186,
+   197,
+   200,
+   207,
+   211,
+   215,
+   402
+  ],
+  "lum_first": 48.76,
+  "lum_last": 1.0
+ }
+}

@@ -1,0 +1,58 @@
+video,frame_start,frame_end,sound_class,spectral_signature,level_vs_bed_db,pan,visual_event,confidence
+R1,52,62,sub-boom with pitch drop,"tone glide ~250->60 Hz, 8-10 f, no HF",+2..+4 (sub band +20),C,marcher falls off cliff edge,medium
+R1,88,98,sub-boom with pitch drop,"glide ~250->70 Hz",+2..+3,C,next marcher falls (~f91); hero drops blindfold f85-93,medium
+R1,138,148,sub-boom with pitch drop,"glide ~250->70 Hz",+2..+3,C,marcher falls while hero pulls others,medium
+R1,228,240,sub-boom with pitch drop + light burst,"glide + air band",+3,C,hero tips over edge with white glow f230-233,medium
+R1,270,282,sub-boom with pitch drop,"glide ~250->60 Hz; RMS +8 dB at f272",+5..+8,C,marcher falls f269-275,medium
+R2,0,40,laughter HA-HA,"bursts 0.5-1.5 kHz every ~5 f (6 per s)",-5..+3 (vs shared music),R -1.7 dB,grey man laughs (HA bubbles),medium
+R2,0,150,rain ambience,"broadband hiss 4-16 kHz continuous; gone by f~215",bed-level (-10..-15),wide,rain scene; stops when red sun appears,high
+R2,95,135,thunder rumble,"noise 100-300 Hz, 40 f",-5..0,C,lightning flash f95,medium
+R2,145,150,whoosh/impact,"+8.6 dB total, bass+presence",+8,C,grey man's umbrella swings/breaks,medium
+R2,177,186,thud,"bass band +18 dB, 2-3 f",+2,C,umbrella hits ground,medium
+R2,186,189,rising chirp,"harmonic glide 1.6->2 kHz & 3.1->4 kHz, 3 f",-10,C,sun scene (bird-like tweet?),low
+R2,210,214,falling chirp,"harmonic glide down 2->1.6 kHz",-10,C,grey man looks up at sun,low
+R3,0,26,quiet intro,"bed at -30 dBFS, no bass",n/a,C,cyclist starts climb,high
+R3,27,27,bass entry,"E1/E2 sub drone enters, +15 dB",n/a,C,climb continues (no visual cut),high
+R3,22,100,rhythmic clicks,"short broadband ticks every ~5 f (6/s)",-3..+3,C,uphill pedalling (pedal/chain ticks?),low
+R3,7,110,sine-like tone E6,"steady 1320 Hz spans of ~0.7 s (7-23, 47-70, 88-110)",-10,C,straining uphill,low
+R3,120,162,glissando arcs,"harmonic arcs 400-600 Hz up/down (whistle/'wheee')",-8,C,rider raises arms going downhill FRI-SUN,low
+R3,125,200,wind whoosh,"broadband HF rise, centroid up",bed,C,fast downhill with speed lines,medium
+R3,244,252,neon flicker hits,"sub +22 dB, 2 hits at 244 and 249",+7..+9,C,red MON sign flickers on (on 244 / off 247 / on 249),high
+R3,255,305,neon hum tone,"steady 1240-1320 Hz",-10,C,MON sign glowing,low
+R3,337,347,ending sting tone,"single 660 Hz (E5) note 10 f, then cut",+0,C,start of fade to black,medium
+R4,1,14,footsteps/clicks,"broadband clicks 2-16 kHz every ~4-5 f",-0..+9,C/L,kid steps toward dad,medium
+R4,27,40,VOICE 'Later' #1,"2 syllables 27-32 & 34-40; formants F1~700 Hz F2 1.3-2 kHz falling; muffled",+4..+8,L +4.6 dB,speech bubble LATER pops f28-29 (dad left),high
+R4,46,56,ball thud/drop,"himid/air transient, long tail",+1..+2,C,red ball falls from kid's hands,medium
+R4,79,90,footsteps,"short broadband transients",+2..+4,C,kid walks back with drawing,medium
+R4,95,108,VOICE 'Later' #2,"2 syllables 95-101 & 102-108",+3..+5,L +2.7 dB,bubble LATER f96,high
+R4,148,160,cloth/rattle,"himid transients",+2..+3,C,kid (13) shakes/holds game,low
+R4,158,171,VOICE 'Later' #3,"2 syllables 158-164 & 165-171",+3..+5,L +4.4 dB,bubble LATER f159,high
+R4,221,247,VOICE 'Later, Dad.',"3 syllables, 0.85 s",+3..+5,R -0.8 dB,bubble 'LATER, DAD.' f222 (teen at door right),high
+R4,247,250,door/whoosh,"air band transient",0,C,teen leaves through door,low
+R4,301,304,chair creak/stand,"mid-air transient",+1,C,dad gets up from chair,low
+R4,349,352,pick-up rustle,"air transient",+1,C,dad bends to pick up ball,low
+R4,407,445,footsteps + door,"transients 407/417/427/439 every ~10 f",+1..+2,C,dad walks to door with ball,medium
+R5,0,30,quiet intro,"bed -26..-32 dBFS",n/a,wide,dad in bed feeding kids,high
+R5,31,31,music entry,"+16.8 dB total, full band",n/a,wide,(no visual cut),high
+R5,42,59,shimmer/whoosh,"air band +32 dB, 17 f",+1,wide,golden spark flies into IV,low
+R5,95,160,energy stops,"rhythm thins, bed only",n/a,wide,dad sits up; kids dim grey,medium
+R5,163,361,IV drip 'bloop',"rising tone 0.8->1.5 kHz in 2 f (~60 ms), every 12.5-13 f",-3..+3,wide,dad lies back; golden drops fall into IV bag,high
+R5,243,352,sparkle chime 'ting',"bell partials 3.15/4.7/6.9 kHz, 3-6 f, every ~10-12 f",-5..0,wide,golden sparks enter IV bag,medium
+R6,18,26,thud with pitch drop,"tone 250->70 Hz, 8 f",+11,L +1.6 dB,money bag lands on pile,high
+R6,53,60,thud with pitch drop,"tone 250->70 Hz, 9 f",+6,C,money bag lands on pile,high
+R6,87,93,tap/whoosh,"air band, 29 f tail",+3,C,reaper taps hero shoulder,medium
+R6,186,192,impact boom + tick,"vertical click to 8 kHz + low drop",+10,C,hourglass flares red; caption line 2 starts f187,high
+R6,209,215,whoosh/impact,"broadband +10 dB, long tail",+10,C,hero walks on carrying bag (turn),medium
+R6,296,300,thud,"sub/bass +16 dB, 4 f",+6,C,hero drops into pit,high
+R7,1,18,pan sizzle/start,"broadband from f0",n/a,C,cooking starts,low
+R7,22,26,clank,"himid +18 dB, 4 f",+5,C,pan/plate handling,medium
+R7,39,45,double beep,"sine 4.0 kHz 2x3 f",-5,C,counter tick (#1->#2?),low
+R7,72,81,double beep,"sine 3.15 kHz 2x3-4 f",-5,C,counter tick,low
+R7,91,105,slide whistle UP,"harmonic glide f0 ~200->500 Hz, harmonics to 2 kHz",-3..0,C,pancake tossed up (ASR hallucinated 'What?'),high
+R7,150,163,slide whistle DOWN,"mirror glide down",-3..0,C,pancake falls back (ASR 'What? No!'),high
+R7,177,184,whoosh,"himid/air 17 f",0,C,stack grows / toss,low
+R7,214,222,clank/flip,"presence +22 dB band",+4,C,perfectionist flips pancake,medium
+R7,249,288,beeps,"sine 4.1 kHz (249-251), 2.7 kHz (281-288)",-5,C,counter #12/#13,low
+R7,294,300,falling whoosh,"broadband rise f297",+1,C,pancake drops from lamp,high
+R7,303,312,head thud,"sub +33 dB band, +13 dB total",+13,L +3.9 dB,pancake lands on perfectionist's head (left),high
+R7,0,408,kick pulse (music),"G1 49 Hz thump every 7.5 f",bed,C,120 BPM groove,high

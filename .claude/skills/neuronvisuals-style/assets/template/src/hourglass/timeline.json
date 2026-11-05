@@ -1,0 +1,107 @@
+{
+  "fps": 30,
+  "total": 390,
+  "fadeStart": 375,
+  "fadeLen": 15,
+  "sand": {
+    "hc0": 0.98,
+    "hc1": 1.61,
+    "upper0": 4.42,
+    "upper1": 4.32
+  },
+  "white": {
+    "turn1": [
+      29,
+      32
+    ],
+    "step1": [
+      36,
+      46
+    ],
+    "reach": [
+      40,
+      48
+    ],
+    "pull": [
+      48,
+      62
+    ],
+    "release": [
+      62,
+      70
+    ],
+    "back": [
+      64,
+      74
+    ],
+    "turn2": [
+      76,
+      82
+    ],
+    "climb": [
+      84,
+      214
+    ],
+    "stepEvery": 14,
+    "slips": [
+      128,
+      170
+    ],
+    "crouch": [
+      214,
+      226
+    ],
+    "jump": [
+      226,
+      232
+    ],
+    "grab": 232,
+    "hang": [
+      232,
+      244
+    ],
+    "pullup": [
+      244,
+      266
+    ],
+    "mantle": [
+      266,
+      290
+    ],
+    "stand": 292,
+    "lookDown": [
+      300,
+      320
+    ]
+  },
+  "grey": {
+    "pulled": [
+      48,
+      62
+    ],
+    "jerk": [
+      60,
+      66
+    ],
+    "taps": 9,
+    "raisePhone": [
+      120,
+      360
+    ]
+  },
+  "camera": {
+    "tiltStart": 188,
+    "tiltEnd": 296,
+    "revealStart": 300,
+    "revealEnd": 352
+  },
+  "text": {
+    "line1": "ТЫ НЕ УБИВАЕШЬ ВРЕМЯ.",
+    "line2": "ОНО ЗАКАПЫВАЕТ ТЕБЯ.",
+    "line2Start": 231,
+    "charsPerFrame": 1.45,
+    "charFade": 3,
+    "dimTo": 0.65,
+    "dimLen": 9
+  }
+}

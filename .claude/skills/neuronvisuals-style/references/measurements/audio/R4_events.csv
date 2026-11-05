@@ -1,0 +1,24 @@
+frame,t,onset,tot_jump_db,peak_band,band_jump_db,bands_up,dur_f,flat,vis_ratio
+1,0.03,15.4,9.1,air,38.0,"['bass', 'lowmid', 'mid', 'himid', 'presence', 'air']",4,0.0,3.13
+6,0.2,12.2,2.0,air,29.1,"['sub', 'bass', 'himid', 'presence', 'air']",3,0.0,3.85
+10,0.33,12.5,0.2,air,24.0,"['himid', 'presence', 'air']",4,0.001,3.32
+17,0.57,11.5,-1.6,presence,3.9,[],1,0.0,1.12
+26,0.87,9.1,8.2,air,29.4,"['lowmid', 'mid', 'himid', 'presence', 'air']",2,0.0,2.31
+34,1.13,6.8,4.2,bass,15.1,"['sub', 'bass', 'air']",42,0.0,0.93
+44,1.47,8.1,0.4,air,24.4,"['himid', 'presence', 'air']",60,0.0,2.07
+49,1.63,11.0,1.5,air,32.8,"['himid', 'presence', 'air']",60,0.0,2.94
+60,2.0,10.9,2.0,air,15.2,"['sub', 'lowmid', 'mid', 'himid', 'presence', 'air']",18,0.0,1.63
+79,2.63,10.1,2.0,sub,9.2,"['sub', 'bass']",1,0.002,3.42
+86,2.87,14.8,4.2,air,16.6,"['bass', 'himid', 'presence', 'air']",6,0.001,2.82
+94,3.13,9.6,1.3,himid,12.0,"['lowmid', 'mid', 'himid']",4,0.0,1.75
+148,4.93,9.6,2.9,himid,13.0,"['sub', 'lowmid', 'himid', 'presence']",0,0.0,2.19
+157,5.23,11.3,1.8,himid,14.7,"['sub', 'mid', 'himid', 'air']",6,0.0,1.12
+171,5.7,8.3,-0.9,air,13.3,"['presence', 'air']",1,0.0,1.1
+207,6.9,8.5,1.5,sub,9.2,"['sub', 'himid', 'presence']",0,0.001,1.44
+247,8.23,8.6,-3.6,air,13.5,['air'],2,0.0,1.89
+301,10.03,15.3,-1.0,air,14.2,"['mid', 'himid', 'presence', 'air']",1,0.0,2.29
+407,13.57,15.6,0.4,air,12.5,"['himid', 'presence', 'air']",1,0.0,3.19
+417,13.9,14.4,1.9,air,24.1,"['lowmid', 'himid', 'presence', 'air']",2,0.0,1.65
+427,14.23,7.6,-0.2,air,15.6,"['mid', 'himid', 'presence', 'air']",2,0.0,2.48
+439,14.63,16.5,1.2,air,26.8,"['lowmid', 'mid', 'himid', 'presence', 'air']",39,0.0,2.15
+492,16.4,8.5,-8.9,air,14.2,['air'],1,0.001,1.85
