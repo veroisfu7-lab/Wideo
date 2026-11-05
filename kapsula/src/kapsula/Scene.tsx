@@ -11,7 +11,7 @@ import {
   heroes, heroGrey, whiteAt, flapOpen, bowlFloor, armState, lampAt, innerGlow, marksAt, camState, seg, lerp,
 } from "./plan";
 
-const props = getInputProps() as { bloom?: boolean; hide?: string[] };
+const props = getInputProps() as { bloom?: boolean; hide?: string[]; ms?: number };
 const hidden = (k: string) => (props.hide ?? []).includes(k);
 const lin = (hex: string) => new THREE.Color(hex);
 const AMBER = "#FFA21F";
@@ -225,7 +225,7 @@ export const KapsulaScene: React.FC = () => {
     {hs.map((h, i) => <Stickman key={"h" + i} j={solveFacing(h.pose, h.s)} z={ZH} near={near} far={far} thin={h.thin} op={h.op} />)}
     {glowHero > 0.005 ? <Halo p={[j0.neck[0], j0.neck[1] - 0.1, ZH + 0.3]} w={2.2} h={2.6} k={glowHero} mat={HALO_HERO} /> : null}
     {props.bloom === false ? null : (
-      <EffectComposer multisampling={8} stencilBuffer>
+      <EffectComposer multisampling={props.ms ?? 8} stencilBuffer>
         <Bloom luminanceThreshold={0.6} luminanceSmoothing={0.3} intensity={0.13} mipmapBlur radius={0.5} />
       </EffectComposer>
     )}
