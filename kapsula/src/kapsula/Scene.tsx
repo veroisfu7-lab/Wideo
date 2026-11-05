@@ -162,7 +162,7 @@ const bowlGeo = (() => {
 const BOWLM = roomMat("#8C898D", "#B9B6BA", 1.2);
 const PASTE = roomMat("#CFC8BA", "#D9D2C4", 1.0);
 const Bowl: React.FC<{ p: [number, number, number]; tilt?: number; full: boolean; upright?: boolean }> = ({ p, tilt = 0, full, upright }) => (
-  <group position={upright ? [p[0], HATCH.y0 + BOWL_R, p[2]] : p} rotation={upright ? [-Math.PI / 2, 0, 0] : [0, 0, tilt]}>
+  <group position={upright ? [p[0], HATCH.y0 + BOWL_R, p[2]] : p} rotation={upright ? [Math.PI / 2, 0, 0] : [0, 0, tilt]}>
     <mesh geometry={bowlGeo} material={BOWLM} position={upright ? [0, -0.035, 0] : [0, 0, 0]} />
     {full ? <mesh material={PASTE} position={[0, upright ? 0.017 : 0.052, 0]} rotation={[-Math.PI / 2, 0, 0]}><circleGeometry args={[0.108, 32]} /></mesh> : null}
   </group>

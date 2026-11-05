@@ -124,7 +124,7 @@ const SITCOT = (x = -0.45, lean = 0.05, head: V2 = [0, 0]): Pose => {
 const KNEEL = (x: number, lean: number, hN?: V2, hF?: V2, head: V2 = [0, 0], low = 0): Pose => {
   const pel: V2 = [x, 0.47 - low], sh = shoulderOf(pel, lean, 1);
   const [rn, rf] = restHands(sh, 1);
-  return { pelvis: pel, lean, footN: [x - 0.36, 0.04], footF: [x - 0.42, 0.04], handN: hN ?? [rn[0] + 0.12, Math.max(0.05, rn[1])], handF: hF ?? [rf[0] + 0.1, Math.max(0.05, rf[1])], headOff: head };
+  return { pelvis: pel, lean, footN: [x - 0.36, 0.07], footF: [x - 0.42, 0.07], handN: hN ?? [rn[0] + 0.12, Math.max(0.05, rn[1])], handF: hF ?? [rf[0] + 0.1, Math.max(0.05, rf[1])], headOff: head };
 };
 const STAND = (x: number, s: number, lean = 0.03): Pose => {
   const pel: V2 = [x, 0.757], sh = shoulderOf(pel, lean, s), [hN, hF] = restHands(sh, s);
@@ -237,11 +237,11 @@ function heroDay7(f: number): Hero {
   const up = seg(f, E.flap7[0] + 2, E.flap7[0] + 10);
   pose = mixPose(pose, KNEEL(0.5, 0.2, undefined, undefined, [0.03, 0.0], 0.04), up);
   const lw = seg(f, E.listen7[0], E.listen7[1]);
-  const LISTEN = KNEEL(0.42, 1.18, [0.86, 0.03], [0.8, 0.03], [0.02, -0.11], 0.0);
+  const LISTEN = KNEEL(0.42, 1.18, [0.64, 0.07], [0.58, 0.07], [0.02, -0.11], 0.0);
   pose = mixPose(pose, LISTEN, lw);
   // щелчок реле: замер, потом выпрямился (уже белый)
   const rise = seg(f, TURN + 4, TURN + 14);
-  pose = mixPose(pose, KNEEL(0.5, 0.55, [0.86, 0.12], [0.8, 0.1], [0.04, 0.0], 0.0), rise);
+  pose = mixPose(pose, KNEEL(0.5, 0.55, [0.68, 0.14], [0.62, 0.12], [0.04, 0.0], 0.0), rise);
   // берёт миску и ставит её ребром в проём
   let bowl: Hero["bowl"];
   const g = seg(f, E.grab7[0], E.grab7[1]);
