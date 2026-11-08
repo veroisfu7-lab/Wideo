@@ -9,3 +9,5 @@ nekrobios/out/*.wav
 nekrobios/out/frames/
 nekrobios/checks/*
 !nekrobios/checks/.gitkeep
+nekrobios/out/*
+!nekrobios/out/.gitkeep
