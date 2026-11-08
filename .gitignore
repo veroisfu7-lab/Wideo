@@ -4,3 +4,6 @@ kapsula/out/*.wav
 kapsula/checks/*
 !kapsula/checks/.gitkeep
 __pycache__/
+labaz/out/
+labaz/checks/
+labaz/public/mix.wav
