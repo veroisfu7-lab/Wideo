@@ -9,7 +9,7 @@ for (const w of ["500", "700"]) list.push(["HStamp", `oswald-cyrillic-${w}-norma
 for (const w of ["400", "500", "700"]) list.push(["HCode", `jetbrains-mono-cyrillic-${w}-normal.woff2`, w], ["HCode", `jetbrains-mono-latin-${w}-normal.woff2`, w]);
 if (typeof document !== "undefined" && !(window as any).__fontsLoading) {
   (window as any).__fontsLoading = true;
-  const h = delayRender("fonts");
+  const h = delayRender("fonts", { timeoutInMilliseconds: 240000 });
   const faces = list.map(([fam, file, w]) => new FontFace(fam, `url(${staticFile("fonts/" + file)}) format("woff2")`, { weight: w, unicodeRange: file.includes("cyrillic") ? CYR : LAT }));
   Promise.all(faces.map((f) => f.load())).then((ls) => { ls.forEach((l) => (document.fonts as any).add(l)); continueRender(h); })
     .catch((e) => { console.error("font", e); continueRender(h); });

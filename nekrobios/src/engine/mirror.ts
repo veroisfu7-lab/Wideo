@@ -66,11 +66,12 @@ void main(){
   // пыль/мутность и полировка
   float clean = 0.0;
   for (int i = 0; i < ${MAX_STROKES}; i++) { vec4 s = uStroke[i]; if (s.w <= 0.0) continue;
-    float dd = length((g - s.xy) / vec2(1.0, 0.8)); clean = max(clean, s.w * (1.0 - smoothstep(s.z * 0.55, s.z, dd + (vnoise(vec3(g * 80.0, float(i))) - 0.5) * 0.02))); }
+    float dd = length((g - s.xy) / vec2(1.0, 0.8)); clean = max(clean, s.w * (1.0 - smoothstep(s.z * 0.35, s.z, dd))); }
+  clean *= 0.85 + 0.15 * fbm3(vec3(g * 25.0, 2.0));
   float dirt = uDirt * (0.65 + 0.5 * fbm3(vec3(g * 14.0, 9.0))) * (1.0 - clean);
   // мутная плёнка гасит отражение и рассеивает свет лампы
   float lampN = max(0.0, 1.0 - length(vW - uLampG) / 2.6);
-  col = mix(col, vec3(0.07, 0.06, 0.05) * (0.4 + 1.6 * lampN) + col * 0.25, clamp(dirt, 0.0, 0.92));
+  col = mix(col, vec3(0.06, 0.055, 0.05) * (0.4 + 1.6 * lampN) + col * 0.3, clamp(dirt, 0.0, 0.92));
   // глубокий серебряный блеск после полировки
   col *= 1.0 + clean * 0.25 * (1.0 - uDirt * 0.3);
   // царапины ловят свет
@@ -81,20 +82,20 @@ void main(){
   col += 0.02 * irid * vec3(0.5 + 0.5 * sin(g.x * 40.0 + 1.0), 0.5 + 0.5 * sin(g.x * 40.0 + 3.0), 0.5 + 0.5 * sin(g.x * 40.0 + 5.0)) * lampN;
   // жидкая ртуть: тяжелее, темнее, с бликами
   float liq = uLiquid * clamp(length(rn) * 60.0, 0.0, 1.0);
-  col = mix(col, col * vec3(0.55, 0.6, 0.66) + vec3(0.9, 0.95, 1.0) * pow(clamp(dot(normalize(vec3(rn * 30.0, 1.0)), normalize(vec3(0.4, 0.6, 0.7))), 0.0, 1.0), 40.0) * 2.0, liq);
+  col = mix(col, col * vec3(0.5, 0.54, 0.6) + vec3(0.75, 0.8, 0.88) * pow(clamp(dot(normalize(vec3(rn * 30.0, 1.0)), normalize(vec3(0.4, 0.6, 0.7))), 0.0, 1.0), 60.0) * 0.5, liq);
   // отпечатки ладоней изнутри: кровь + ртуть, сползают вниз и оставляют полосы
   if (uPrints.w > 0.0) {
     for (int k = 0; k < 2; k++) {
       float sx = k == 0 ? -1.0 : 1.0;
-      vec2 c0 = vec2(sx * 0.12 + (k == 0 ? -0.01 : 0.02), uPrints.x + (k == 0 ? 0.0 : 0.05));
+      vec2 c0 = vec2(sx * 0.17 + (k == 0 ? -0.01 : 0.02), uPrints.x + (k == 0 ? 0.0 : 0.06));
       float slide = uPrints.y * (k == 0 ? 1.0 : 0.85);
       vec2 c = c0 - vec2(0.0, slide);
       vec2 pp = (g - c) * vec2(sx, 1.0);
-      float dp = palm(vec2(pp.x, pp.y) * 1.0);
+      float dp = palm(vec2(pp.x, pp.y) / 1.55) * 1.55;
       float body = 1.0 - smoothstep(-0.004, 0.004, dp + (vnoise(vec3(g * 200.0, float(k))) - 0.5) * 0.008);
       // полосы от пальцев и ладони вверх (след сползания)
       float strip = 0.0;
-      for (int j = 0; j < 5; j++) { float fx = c.x + sx * (-0.035 + float(j) * 0.019); float w = 0.006 + 0.003 * vnoise(vec3(float(j), float(k), 1.0));
+      for (int j = 0; j < 5; j++) { float fx = c.x + sx * (-0.055 + float(j) * 0.029); float w = 0.009 + 0.005 * vnoise(vec3(float(j), float(k), 1.0));
         strip = max(strip, (1.0 - smoothstep(w * 0.5, w, abs(g.x - fx))) * step(c.y + 0.02, g.y) * step(g.y, c0.y + 0.09) * (1.0 - smoothstep(0.0, slide + 0.05, g.y - c.y)) ); }
       float m = max(body, strip * 0.75) * uPrints.w;
       float merc = smoothstep(0.45, 0.7, vnoise(vec3(g * 90.0, 7.0 + float(k))));

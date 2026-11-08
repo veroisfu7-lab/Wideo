@@ -62,7 +62,7 @@ export type SkinUniforms = { uMetal: THREE.IUniform<number>; uPale: THREE.IUnifo
 
 // --------------------------------------------------------------------- кожа головы
 export function skinMaterial(kind: "head" | "hand", U: SkinUniforms) {
-  const m = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.52, metalness: 0, sheen: 0.35, sheenColor: new THREE.Color(0.9, 0.35, 0.25), sheenRoughness: 0.45,
+  const m = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0, sheen: 0.12, sheenColor: new THREE.Color(0.9, 0.45, 0.35), sheenRoughness: 0.45,
     specularIntensity: 0.55, clearcoat: 0.0 });
   const headMasks = `
     vec3 p = vLocal; float ax = abs(p.x);
@@ -79,7 +79,7 @@ export function skinMaterial(kind: "head" | "hand", U: SkinUniforms) {
     key: "skin-" + kind,
     uniforms: U as any,
     fColor: (kind === "head" ? headMasks : `vec3 p = vLocal; float lips = 0.0, cav = 0.0, brow = 0.0, stub = 0.0, red = 0.0, eyeA = 0.0;`) + `
-    vec3 base = vec3(0.62, 0.40, 0.31);
+    vec3 base = vec3(0.56, 0.39, 0.32);
     base *= 0.92 + 0.16 * vnoise(p * 180.0);
     base = mix(base, vec3(0.70, 0.33, 0.27), clamp(red, 0.0, 1.0) * 0.35);
     base = mix(base, vec3(0.50, 0.24, 0.22), lips * 0.75);
@@ -91,12 +91,12 @@ export function skinMaterial(kind: "head" | "hand", U: SkinUniforms) {
     #endif
     base = mix(base, base * vec3(0.78, 0.8, 0.84), uPale);
     base = mix(base, vec3(0.06, 0.012, 0.012), cav);
-    vec3 silver = vec3(0.56, 0.60, 0.63) * (0.85 + 0.25 * vnoise(p * 90.0));
+    vec3 silver = vec3(0.62, 0.66, 0.70) * (0.8 + 0.3 * vnoise(p * 90.0));
     diffuseColor.rgb = mix(base, silver, uMetal);
     float skinCav = cav; float skinLips = lips;`,
-    fRough: `roughnessFactor = mix(roughnessFactor - 0.12*skinLips + 0.15*skinCav, 0.17 + 0.1*vnoise(vLocal*140.0), uMetal);
+    fRough: `roughnessFactor = mix(roughnessFactor - 0.12*skinLips + 0.15*skinCav, 0.3 + 0.12*vnoise(vLocal*140.0), uMetal);
              roughnessFactor = mix(roughnessFactor, 0.12, uWet);
-             metalnessFactor = mix(0.0, 0.92, uMetal);`,
+             metalnessFactor = mix(0.0, 0.55, uMetal);`,
     fNormal: `{ float hb = (vnoise(vLocal * 2400.0) * 0.6 + vnoise(vLocal * 700.0) * 0.4) * 0.000035 * (1.0 - uMetal * 0.7);
               normal = bumpN(-vViewPosition, normal, hb, faceDirection); }`,
   };
@@ -152,7 +152,7 @@ export function teethMaterial() {
 }
 
 // --------------------------------------------------------------------- глаза: сфера, +z — взгляд
-export function eyeMaterial(U: { uMetal: THREE.IUniform<number>; uPupil: THREE.IUniform<number> }) {
+export function eyeMaterial(U: { uMetal: THREE.IUniform<number>; uPupil: THREE.IUniform<number>; uSil: THREE.IUniform<number> }) {
   const m = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.25, clearcoat: 1.0, clearcoatRoughness: 0.03, metalness: 0 });
   return patch(m, {
     key: "eye",
@@ -170,7 +170,16 @@ export function eyeMaterial(U: { uMetal: THREE.IUniform<number>; uPupil: THREE.I
       vec3 c = mix(scl, ic, iris);
       c = mix(c, vec3(0.005), pupil);
       vec3 chrome = vec3(0.86, 0.9, 0.93);
+      // отражение испуганного парня в ртутных глазах (силуэт: голова + плечи, контур от лампы)
+      vec2 q = d.xy - vec2(0.05, -0.02);
+      float head = length((q - vec2(0.0, 0.10)) / vec2(0.10, 0.12));
+      float sh = length((q - vec2(0.0, -0.17)) / vec2(0.30, 0.14));
+      float sil = (1.0 - smoothstep(0.92, 1.0, min(head, sh))) * step(0.0, d.z) * uSil;
+      float rimS = (smoothstep(0.80, 0.95, min(head, sh)) - smoothstep(0.95, 1.05, min(head, sh))) * step(0.0, d.z) * uSil;
+      chrome = mix(chrome, vec3(0.04, 0.035, 0.03), sil);
+      chrome += vec3(1.0, 0.6, 0.25) * rimS * 0.8;
       diffuseColor.rgb = mix(c, chrome, uMetal);`,
     fRough: `metalnessFactor = uMetal; roughnessFactor = mix(roughnessFactor, 0.02, uMetal);`,
+    fEnd: `{ float fr = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition))); gl_FragColor.rgb += vec3(0.55, 0.6, 0.66) * uMetal * (0.12 + 0.35 * fr); }`,
   });
 }

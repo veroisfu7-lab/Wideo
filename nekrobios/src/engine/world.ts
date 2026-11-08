@@ -132,6 +132,7 @@ export class World {
   group = new THREE.Group();
   lampShade!: THREE.Mesh; bulb!: THREE.Mesh; bulbMat!: THREE.MeshBasicMaterial; cone!: THREE.Mesh; coneMat!: THREE.ShaderMaterial;
   dust!: THREE.InstancedMesh; dustMat!: THREE.ShaderMaterial;
+  mkey!: THREE.SpotLight; mfill!: THREE.PointLight;
   key!: THREE.SpotLight; fill!: THREE.PointLight; rim!: THREE.SpotLight; moon!: THREE.SpotLight; shadeGlow!: THREE.PointLight; amb!: THREE.HemisphereLight;
   benchTools = new THREE.Group();
   folderSpot = new THREE.Vector3(1.55, BENCH.y, 0.22);
@@ -268,7 +269,7 @@ export class World {
     // ---- свет
     this.key = new THREE.SpotLight(new THREE.Color("#FFA448"), 9, 9, 0.78, 0.65, 1.6);
     this.key.position.copy(L); this.key.target.position.set(L.x - 0.35, 0, L.z - 0.15);
-    this.key.castShadow = true; this.key.shadow.mapSize.set(2048, 2048); this.key.shadow.bias = -0.0004; this.key.shadow.normalBias = 0.02;
+    this.key.castShadow = true; this.key.shadow.mapSize.set(1536, 1536); this.key.shadow.bias = -0.0004; this.key.shadow.normalBias = 0.02;
     this.key.shadow.camera.near = 0.1; this.key.shadow.camera.far = 6; this.key.shadow.radius = 4; this.key.shadow.camera.layers.enable(1);
     g.add(this.key, this.key.target);
     this.shadeGlow = new THREE.PointLight(new THREE.Color("#FFB060"), 0.6, 1.2, 2); this.shadeGlow.position.copy(L).add(new THREE.Vector3(0, 0.06, 0)); g.add(this.shadeGlow);
@@ -278,6 +279,11 @@ export class World {
     this.rim.position.set(-1.6, 2.7, -0.3); this.rim.target.position.set(0.1, 1.3, 1.0); g.add(this.rim, this.rim.target);
     this.moon = new THREE.SpotLight(new THREE.Color("#8FA6C0"), 2, 8, 0.6, 0.9, 1.5);
     this.moon.position.set(1.1, 1.7, ROOM.zF - 0.2); this.moon.target.position.set(-0.4, 0.6, 2.0); g.add(this.moon, this.moon.target);
+    // свет «Зазеркалья»: только в проходе отражения (слой 2) — подсвечивает лицо двойника изнутри
+    this.mkey = new THREE.SpotLight(new THREE.Color("#FFB070"), 3.2, 6, 0.6, 0.8, 1.5);
+    this.mkey.position.set(0.55, 2.0, -0.9); this.mkey.target.position.set(0.0, 1.55, 0.6);
+    this.mkey.layers.set(2); this.mkey.target.layers.set(2); g.add(this.mkey, this.mkey.target);
+    this.mfill = new THREE.PointLight(new THREE.Color("#8FB4D0"), 0.6, 4, 2); this.mfill.position.set(-0.6, 1.3, -0.7); this.mfill.layers.set(2); g.add(this.mfill);
     this.amb = new THREE.HemisphereLight(new THREE.Color("#2a2f3a"), new THREE.Color("#1a120a"), 0.12); g.add(this.amb);
 
     // ---- объёмный конус света (аддитивный)

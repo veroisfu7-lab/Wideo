@@ -6,16 +6,16 @@ import { direct } from "./film/director";
 import { HUD } from "./hud/HUD";
 import "./fonts";
 
-const IP = getInputProps() as { sc?: number; offset?: number };
+const IP = getInputProps() as { sc?: number; offset?: number; list?: number[] };
 let enginePromise: Promise<Engine> | null = null;
 const getEngine = (c: HTMLCanvasElement, w: number, h: number) => {
-  if (!enginePromise) enginePromise = (async () => { const E = new Engine(c, w, h, IP.sc ?? 0.75); await E.init(); return E; })();
+  if (!enginePromise) enginePromise = (async () => { const E = new Engine(c, w, h, IP.sc ?? 0.7); await E.init(); return E; })();
   return enginePromise;
 };
 
 export const Film: React.FC = () => {
   const f0 = useCurrentFrame();
-  const frame = f0 + (IP.offset ?? 0);
+  const frame = IP.list ? IP.list[Math.min(f0, IP.list.length - 1)] : f0 + (IP.offset ?? 0);
   const { width, height } = useVideoConfig();
   const ref = useRef<HTMLCanvasElement>(null);
   const [hud, setHud] = useState<(Hud & { frame: number }) | null>(null);

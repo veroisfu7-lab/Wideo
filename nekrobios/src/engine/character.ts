@@ -21,7 +21,7 @@ export const HANDS: Record<string, HandPose> = {
   point: { thumb: { curl: 40, spread: -12 }, index: { curl: 4 }, middle: { curl: 80 }, ring: { curl: 86 }, pinky: { curl: 88 } },
   flat: { thumb: { curl: 4, spread: 12 }, index: { curl: 2, spread: 4 }, middle: { curl: 2 }, ring: { curl: 3, spread: -4 }, pinky: { curl: 4, spread: -9 } },
   claw: { thumb: { curl: 30, spread: 15 }, index: { curl: 45, tip: 50 }, middle: { curl: 48, tip: 55 }, ring: { curl: 50, tip: 55 }, pinky: { curl: 52, tip: 58 } },
-  rag: { thumb: { curl: 30, spread: -6 }, index: { curl: 48 }, middle: { curl: 52 }, ring: { curl: 56 }, pinky: { curl: 60 } },
+  rag: { thumb: { curl: 34, spread: -14 }, index: { curl: 40, spread: -4 }, middle: { curl: 42 }, ring: { curl: 44, spread: 3 }, pinky: { curl: 46, spread: 5 } },
 };
 export const mixHand = (a: HandPose, b: HandPose, t: number): HandPose => {
   const o: any = {};
@@ -42,7 +42,7 @@ export class Character {
   head: THREE.Mesh; hair: THREE.Mesh; teeth: THREE.Mesh; eyes: THREE.Mesh[] = [];
   eyeRest: THREE.Vector3[] = [];
   U = { uMetal: { value: 0 }, uPale: { value: 0 }, uWet: { value: 0 } };
-  EU = { uMetal: { value: 0 }, uPupil: { value: 0.2 } };
+  EU = { uMetal: { value: 0 }, uPupil: { value: 0.2 }, uSil: { value: 0 } };
   hf: Record<string, THREE.Matrix3> = {};
   morph: Record<string, number>;
 
