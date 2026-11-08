@@ -32,7 +32,7 @@ export const Subtitles: React.FC = () => {
   const o = ss(a, a + 0.18, t) * (1 - ss(b - 0.18, b, t));
   const apo = s.startsWith("—");
   return (
-    <div style={{ position: "absolute", left: 60, right: 60, top: 1500, textAlign: "center", fontFamily: "Osw", fontWeight: 300,
+    <div style={{ position: "absolute", left: 60, right: 60, top: 1500, textAlign: "center", fontFamily: "CicadaOswCyr, CicadaOswLat", fontWeight: 300,
       fontSize: 40, lineHeight: 1.32, letterSpacing: "0.03em", whiteSpace: "pre-line", opacity: o,
       color: apo ? "#E9D3A6" : "#EDEFF2", textShadow: "0 0 3px #000, 0 2px 14px rgba(0,0,0,0.95), 0 0 30px rgba(0,0,0,0.8)" }}>
       {s}
@@ -48,7 +48,7 @@ export const ScreenText: React.FC<{ t: number; len: number }> = ({ t }) => {
   let k = 0;
   return (
     <div style={{ position: "absolute", left: 0, right: 0, top: 930, transform: "rotate(2.9deg)", textAlign: "center",
-      fontFamily: "Corm", fontWeight: 600, fontSize: 64, lineHeight: 1.12, color: "#2A1A0C" }}>
+      fontFamily: "CicadaCormCyr, CicadaCormLat", fontWeight: 600, fontSize: 70, WebkitTextStroke: "0.8px #2A1A0C", lineHeight: 1.12, color: "#2A1A0C" }}>
       {MSG.map((line, li) => (
         <div key={li} style={{ height: line ? "auto" : 30 }}>
           {Array.from(line).map((ch, i) => {
@@ -77,7 +77,7 @@ export const PalmText: React.FC<{ t: number; len: number }> = ({ t }) => {
   const flick = 0.85 + 0.15 * Math.sin(t * 23) * Math.sin(t * 7);
   return (
     <div style={{ position: "absolute", left: 0, right: 0, top: 1395, textAlign: "center", transform: "rotate(6.9deg)",
-      fontFamily: "Osw", fontWeight: 300, fontSize: 26, letterSpacing: "0.35em", color: "#F2C46A", opacity: o * flick * 0.85,
+      fontFamily: "CicadaOswCyr, CicadaOswLat", fontWeight: 300, fontSize: 26, letterSpacing: "0.35em", color: "#F2C46A", opacity: o * flick * 0.85,
       textShadow: "0 0 8px rgba(229,169,60,0.9), 0 0 22px rgba(229,169,60,0.5)" }}>
       {COORD}
     </div>
@@ -92,9 +92,9 @@ export const EyeText: React.FC<{ t: number; len: number }> = ({ t }) => {
   return (
     <div style={{ position: "absolute", left: 0, right: 0, top: 860, textAlign: "center", transform: "scaleX(-1)", opacity: o,
       filter: "blur(0.6px)", mixBlendMode: "screen" }}>
-      <div style={{ fontFamily: "Osw", fontWeight: 300, fontSize: 92, lineHeight: 1, letterSpacing: "0.06em", color: "#BFE6F5",
+      <div style={{ fontFamily: "CicadaOswCyr, CicadaOswLat", fontWeight: 300, fontSize: 92, lineHeight: 1, letterSpacing: "0.06em", color: "#BFE6F5",
         textShadow: "0 0 12px rgba(120,200,240,0.8)" }}>{mm}:{sc}</div>
-      <div style={{ fontFamily: "Osw", fontWeight: 300, fontSize: 19, marginTop: 10, letterSpacing: "0.3em", color: "#F0C060",
+      <div style={{ fontFamily: "CicadaOswCyr, CicadaOswLat", fontWeight: 300, fontSize: 19, marginTop: 10, letterSpacing: "0.3em", color: "#F0C060",
         textShadow: "0 0 8px rgba(229,169,60,0.8)" }}>{COORD}</div>
     </div>
   );
@@ -108,7 +108,7 @@ export const BigScreenText: React.FC<{ t: number; len: number }> = ({ t }) => {
   const s1 = L1.slice(0, n), s2 = L2.slice(0, Math.max(0, n - L1.length - 4));
   const cur = Math.floor(t * 2.5) % 2 === 0 ? "▌" : " ";
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: 735, textAlign: "center", fontFamily: "Osw", fontWeight: 300, fontSize: 30,
+    <div style={{ position: "absolute", left: 0, right: 0, top: 735, textAlign: "center", fontFamily: "CicadaOswCyr, CicadaOswLat", fontWeight: 300, fontSize: 30,
       letterSpacing: "0.12em", lineHeight: 1.5, color: "#F3C673", textShadow: "0 0 10px rgba(229,169,60,0.9), 0 0 30px rgba(229,169,60,0.45)", opacity: t < t0 ? 0 : 1 }}>
       <div>{s1}{n <= L1.length ? cur : ""}</div>
       <div style={{ fontSize: 22, letterSpacing: "0.22em", color: "#E5A93C" }}>{s2}{n > L1.length + 4 ? cur : ""}</div>
@@ -122,7 +122,7 @@ export const EndTitles: React.FC<{ t: number; len: number }> = ({ t }) => {
   const a = (d: number, dur = 0.6) => ss(t0 + d, t0 + d + dur, t);
   const gold = "#E5A93C";
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, top: 1170, textAlign: "center", fontFamily: "Osw" }}>
+    <div style={{ position: "absolute", left: 0, right: 0, top: 1170, textAlign: "center", fontFamily: "CicadaOswCyr, CicadaOswLat" }}>
       <div style={{ opacity: a(0.5), fontWeight: 500, fontSize: 46, letterSpacing: "0.32em", color: gold, textShadow: "0 0 18px rgba(229,169,60,0.45)" }}>ЭПИЗОД 1: ИНИЦИАЦИЯ</div>
       <div style={{ opacity: a(1.2) * 0.85, marginTop: 70, fontWeight: 300, fontSize: 34, letterSpacing: "0.4em", color: "#D9DCE0" }}>КТО УПРАВЛЯЕТ РОЕМ?</div>
       <div style={{ opacity: a(2.0) * 0.6, marginTop: 26, fontWeight: 300, fontSize: 24, letterSpacing: "0.5em", color: "#9AA2AA" }}>ПРОДОЛЖЕНИЕ СЛЕДУЕТ</div>
