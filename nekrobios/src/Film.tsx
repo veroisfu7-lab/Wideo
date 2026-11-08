@@ -4,7 +4,7 @@ import { AbsoluteFill, continueRender, delayRender, getInputProps, useCurrentFra
 import { Engine, Hud } from "./engine/engine";
 import { direct } from "./film/director";
 import { HUD } from "./hud/HUD";
-import "./fonts";
+import { fontsReady } from "./fonts";
 
 const IP = getInputProps() as { sc?: number; offset?: number; list?: number[] };
 let enginePromise: Promise<Engine> | null = null;
@@ -22,7 +22,7 @@ export const Film: React.FC = () => {
   const handle = useMemo(() => delayRender("frame " + frame, { timeoutInMilliseconds: 600000 }), [frame]);
   useLayoutEffect(() => {
     let dead = false;
-    getEngine(ref.current!, width, height).then((E) => {
+    Promise.all([getEngine(ref.current!, width, height), fontsReady()]).then(([E]) => {
       if (dead) return;
       E.reset();
       const h = direct(E, frame);

@@ -9,6 +9,7 @@ import { World, LAMP } from "./world";
 import { bronzeMat, metalMat } from "./world";
 import { patch, withAO } from "./materials";
 import { Claw, Droplets, Folder } from "./extras";
+import { fontsReady } from "../fonts";
 
 export type Hud = Record<string, any>;
 
@@ -45,6 +46,7 @@ export class Engine {
   }
 
   async init() {
+    await fontsReady(); // папка рисует текст на canvas — нужны шрифты
     const [rig, body, head, props] = await Promise.all([loadJSON("rig.json"), loadPack("body"), loadPack("head"), loadPack("props")]);
     this.rig = rig; this.body = body; this.head = head; this.props = props;
     // окружение для отражений металла/стекла
