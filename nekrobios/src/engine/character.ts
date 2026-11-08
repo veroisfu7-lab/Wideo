@@ -42,7 +42,7 @@ export class Character {
   head: THREE.Mesh; hair: THREE.Mesh; teeth: THREE.Mesh; eyes: THREE.Mesh[] = [];
   eyeRest: THREE.Vector3[] = [];
   U = { uMetal: { value: 0 }, uPale: { value: 0 }, uWet: { value: 0 } };
-  EU = { uMetal: { value: 0 }, uPupil: { value: 0.2 }, uSil: { value: 0 } };
+  EU = { uMetal: { value: 0 }, uPupil: { value: 0.2 }, uSil: { value: 0 }, uGlint: { value: 0 } };
   hf: Record<string, THREE.Matrix3> = {};
   morph: Record<string, number>;
 

@@ -75,7 +75,7 @@ export class Engine {
     this.scene.add(this.hero.root, this.double.root);
 
     // реквизит
-    const iron = metalMat("castiron", "#3a3a3d", 0.42);
+    const iron = metalMat("castiron", "#6a6a70", 0.34);
     this.wrench = new THREE.Mesh(props.geos.wrench, iron); this.wrench.castShadow = true; this.wrench.receiveShadow = true;
     this.clipMat(iron);
     const ragMat = withAO(new THREE.MeshPhysicalMaterial({ color: new THREE.Color(0.86, 0.84, 0.8), roughness: 0.95, sheen: 0.5, sheenColor: new THREE.Color(0.9, 0.88, 0.85) }));
@@ -158,7 +158,7 @@ export class Engine {
     this.usePhoneFeed = false; this.showMirror = true;
     for (const c of [this.hero, this.double]) {
       c.resetPose(); c.root.position.set(0, 0, 0); c.root.rotation.set(0, 0, 0);
-      c.U.uMetal.value = 0; c.U.uPale.value = 0; c.U.uWet.value = 0; c.EU.uMetal.value = 0; c.EU.uPupil.value = 0.22; c.EU.uSil.value = 0;
+      c.U.uMetal.value = 0; c.U.uPale.value = 0; c.U.uWet.value = 0; c.EU.uMetal.value = 0; c.EU.uPupil.value = 0.22; c.EU.uSil.value = 0; c.EU.uGlint.value = 0;
       c.setMorph({ blink: 0, wide: 0, jaw: 0, grin: 0, pucker: 0 }); c.teeth.visible = false;
       c.head.visible = true; c.hair.visible = true; for (const e of c.eyes) e.visible = true; for (const m of c.meshes) if (m !== c.teeth) m.visible = true;
     }

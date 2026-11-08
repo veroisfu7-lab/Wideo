@@ -11,7 +11,10 @@ if (typeof document !== "undefined" && !(window as any).__fontsLoading) {
   (window as any).__fontsLoading = true;
   const h = delayRender("fonts", { timeoutInMilliseconds: 240000 });
   const faces = list.map(([fam, file, w]) => new FontFace(fam, `url(${staticFile("fonts/" + file)}) format("woff2")`, { weight: w, unicodeRange: file.includes("cyrillic") ? CYR : LAT }));
-  Promise.all(faces.map((f) => f.load())).then((ls) => { ls.forEach((l) => (document.fonts as any).add(l)); continueRender(h); })
-    .catch((e) => { console.error("font", e); continueRender(h); });
+  let done = false;
+  const finish = () => { if (!done) { done = true; try { continueRender(h); } catch (e) { /* уже снят */ } } };
+  // шрифт, который не загрузился за 20 с, не должен ронять рендер
+  setTimeout(finish, 20000);
+  Promise.all(faces.map((f) => f.load().then((l) => { (document.fonts as any).add(l); }).catch((e) => console.error("font", e)))).then(finish, finish);
 }
 export const F = { ui: "HInter, sans-serif", mono: "HMono, monospace", stamp: "HStamp, sans-serif", code: "HCode, monospace" };

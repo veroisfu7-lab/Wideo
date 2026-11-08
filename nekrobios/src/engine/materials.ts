@@ -152,7 +152,7 @@ export function teethMaterial() {
 }
 
 // --------------------------------------------------------------------- глаза: сфера, +z — взгляд
-export function eyeMaterial(U: { uMetal: THREE.IUniform<number>; uPupil: THREE.IUniform<number>; uSil: THREE.IUniform<number> }) {
+export function eyeMaterial(U: { uMetal: THREE.IUniform<number>; uPupil: THREE.IUniform<number>; uSil: THREE.IUniform<number>; uGlint: THREE.IUniform<number> }) {
   const m = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.25, clearcoat: 1.0, clearcoatRoughness: 0.03, metalness: 0 });
   return patch(m, {
     key: "eye",
@@ -178,8 +178,10 @@ export function eyeMaterial(U: { uMetal: THREE.IUniform<number>; uPupil: THREE.I
       float rimS = (smoothstep(0.80, 0.95, min(head, sh)) - smoothstep(0.95, 1.05, min(head, sh))) * step(0.0, d.z) * uSil;
       chrome = mix(chrome, vec3(0.04, 0.035, 0.03), sil);
       chrome += vec3(1.0, 0.6, 0.25) * rimS * 0.8;
-      diffuseColor.rgb = mix(c, chrome, uMetal);`,
+      diffuseColor.rgb = mix(c, chrome, uMetal);
+      float eyePupil = pupil;`,
     fRough: `metalnessFactor = uMetal; roughnessFactor = mix(roughnessFactor, 0.02, uMetal);`,
-    fEnd: `{ float fr = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition))); gl_FragColor.rgb += vec3(0.55, 0.6, 0.66) * uMetal * (0.12 + 0.35 * fr); }`,
+    fEnd: `{ float fr = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition))); gl_FragColor.rgb += vec3(0.55, 0.6, 0.66) * uMetal * (0.12 + 0.35 * fr);
+      gl_FragColor.rgb += vec3(0.75, 0.85, 1.0) * eyePupil * uGlint * 3.0; }`,
   });
 }

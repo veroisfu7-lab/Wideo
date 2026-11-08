@@ -467,7 +467,7 @@ export function direct(E: Engine, f: number): Hud {
       cam(E, [0.42 - 0.02 * pushin, 1.72, 1.15 - 0.06 * pushin], [0.02, 1.66, -0.5], 40);
       P.focus = 1.82 - 0.06 * pushin; P.aperture = 13; P.maxCoc = 24; P.edgeBlur = 6; P.vol = 0.05;
       const fr = projMirror(E, new THREE.Vector3(-GLASS.x + 0.02, 1.5, 0));
-      hud.desync = { a: clamp01((t - EV.desyncHud) / 0.3), x: 140, y: 820, val: 0.48, warn: 0 };
+      hud.desync = { a: clamp01((t - EV.desyncHud) / 0.3), x: 590, y: 470, val: 0.48, warn: 0 };
       void fr;
       break;
     }
@@ -606,7 +606,7 @@ export function direct(E: Engine, f: number): Hud {
       cam(E, [0.34 - 0.04 * k + wob(t * 0.4, 1) * 0.004, 1.64 + wob(t * 0.35, 2) * 0.003, 1.95 - 0.12 * k], [-0.08, 1.42 - 0.04 * k, 0], 33);
       const dz = E.double.root.position.z;
       P.focus = Math.hypot(0.34, 0.0, 1.95 - 0.12 * k + dz); P.aperture = 10; P.edgeBlur = 7; P.vol = 0.05;
-      hud.desync = { a: 1, x: 140, y: 760, val: lerp(0.48, 3.4, seg(u, 0.4, 7)), warn: seg(u, 3, 7) };
+      hud.desync = { a: 1, x: 590, y: 400, val: lerp(0.48, 3.4, seg(u, 0.4, 7)), warn: seg(u, 3, 7) };
       mu.uGlow.value.setRGB(0, 0.012 * seg(u, 3, 7), 0.014 * seg(u, 3, 7));
       break;
     }
@@ -645,7 +645,7 @@ export function direct(E: Engine, f: number): Hud {
       cam(E, cp, [at[0] + shake(t, 4, 0.7) * 0.02 * a, at[1] + shake(t, 5, 0.7) * 0.02 * a, at[2]], 46, shake(t, 6, 0.5) * 1.2 * a);
       P.focus = E.cam.position.distanceTo(E.hero.root.position.clone().setY(1.4)); P.aperture = 7; P.edgeBlur = 8; P.vol = 0.05;
       E.world.rim.intensity = 7;
-      if (t > EV.impact - 0.06) P.flash = 0.25;
+      if (t > EV.impact - 0.04) P.flash = 0.06;
       break;
     }
     case "s5b": {
@@ -698,7 +698,7 @@ export function direct(E: Engine, f: number): Hud {
       E.hero.root.visible = true;
       apply(E.hero, imposterTurn(t));
       const g = Math.exp(-Math.pow((t - EV.glint) / 0.07, 2));
-      E.hero.EU.uMetal.value = 0.85 * g; E.hero.EU.uPupil.value = 0.22 - 0.06 * g;
+      E.hero.EU.uGlint.value = g; E.hero.EU.uMetal.value = 0.12 * g;
       const k = smooth(u / 2.3);
       cam(E, [0.6 - 0.04 * k, 1.70, 0.70], [0.0, 1.675, 0.70], 28);
       P.focus = 0.6 - 0.04 * k - 0.07; P.aperture = 11; P.maxCoc = 20; P.edgeBlur = 8; P.vol = 0.0;

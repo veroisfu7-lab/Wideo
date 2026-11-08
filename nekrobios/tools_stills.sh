@@ -3,7 +3,7 @@
 LIST="$1"; OUT="$2"; SC="${3:-0.3}"
 N=$(echo "$LIST" | tr ',' '\n' | wc -l)
 rm -rf out/frames && mkdir -p out/frames
-npx remotion render src/index.ts Nekrobios out/frames --sequence --image-format=jpeg --jpeg-quality=85 --scale=$SC --frames=0-$((N-1)) --props="{\"list\":[$LIST]}" --log=error --concurrency=1 --timeout=600000
+npx remotion render src/index.ts Nekrobios out/frames --sequence --image-format=jpeg --jpeg-quality=85 --scale=$SC --frames=0-$((N-1)) --props="{\"list\":[$LIST],\"sc\":${SCI:-0.7}}" --log=error --concurrency=1 --timeout=600000
 python3 - "$OUT" <<'PY'
 import sys, glob, cv2, numpy as np
 fs = sorted(glob.glob("out/frames/*.jpeg"))
