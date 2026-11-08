@@ -4,3 +4,6 @@ kapsula/out/*.wav
 kapsula/checks/*
 !kapsula/checks/.gitkeep
 __pycache__/
+cicada/out/*.mp4
+cicada/out/*.wav
+cicada/checks/*
