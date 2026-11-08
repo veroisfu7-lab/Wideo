@@ -32,12 +32,15 @@ const FONTS: [string, string][] = [
   ["Anton", "Anton.woff2"],
 ];
 if (typeof window !== "undefined" && typeof FontFace !== "undefined") {
-  const h = delayRender("fonts");
+  const h = delayRender("fonts", { timeoutInMilliseconds: 60000 });
+  let done = false;
+  const finish = () => { if (!done) { done = true; continueRender(h); } };
   Promise.all(
     FONTS.map(([family, file]) =>
       new FontFace(family, `url(${staticFile("fonts/" + file)})`).load().then((ff) => (document.fonts as any).add(ff)),
     ),
-  ).then(() => continueRender(h), () => continueRender(h));
+  ).then(finish, finish);
+  setTimeout(finish, 15000);
 }
 
 // ---------------------------------------------------------------- анимация
