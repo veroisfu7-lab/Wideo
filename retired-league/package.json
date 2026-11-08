@@ -1,0 +1,12 @@
+{
+  "name": "retired-league",
+  "private": true,
+  "scripts": { "studio": "remotion studio", "render": "remotion render RetiredLeague out/retired_league.mp4" },
+  "dependencies": {
+    "@remotion/cli": "4.0.290",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.290"
+  },
+  "devDependencies": { "@types/react": "18.3.12", "typescript": "5.6.3" }
+}

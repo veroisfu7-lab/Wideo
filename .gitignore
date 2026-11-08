@@ -4,3 +4,6 @@ kapsula/out/*.wav
 kapsula/checks/*
 !kapsula/checks/.gitkeep
 __pycache__/
+retired-league/out/*.mp4
+retired-league/checks/*
+!retired-league/checks/.gitkeep

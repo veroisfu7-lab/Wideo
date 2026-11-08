@@ -1,0 +1,11 @@
+{
+  "fps": 30,
+  "total": 450,
+  "gates": { "start": 0, "bell": 2, "creak": 8, "iris": 44, "irisEnd": 58 },
+  "captain": { "start": 44, "snores": [4, 26], "ecu": 12, "wake": 46, "yawn": 50, "word": 51, "lower": 58, "yawnEnd": 92 },
+  "nana": { "start": 150, "pour": 8, "pourEnd": 36, "bubble": 28, "pop": 45, "lower": 52, "ding": 78 },
+  "tempest": { "start": 240, "sparks": [6, 18], "raise": 24, "crack": 37, "grab": 39, "inset": 41, "word": 45, "lower": 54 },
+  "robo": { "start": 330, "wind": 2, "hit": 15, "lower": 24, "gear": 25 },
+  "title": { "start": 390, "star": 1, "lines": [4, 8, 12], "portraits": [14, 17, 20, 23], "ticker": 16, "chord": 12, "whistle": 37, "tvoff": 48 },
+  "wipes": [150, 240, 330]
+}
