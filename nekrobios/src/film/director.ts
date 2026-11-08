@@ -437,12 +437,13 @@ export function direct(E: Engine, f: number): Hud {
       E.hero.root.visible = true; E.double.root.visible = true;
       const hs = heroPolish(t); apply(E.hero, hs); apply(E.double, hs);
       E.rag.visible = true; E.ragD.visible = true;
-      attach(E.rag, E.hero, "R", new THREE.Vector3(0.072, -0.03, 0.0), new THREE.Euler(0, 0, 0));
-      attach(E.ragD, E.double, "R", new THREE.Vector3(0.072, -0.03, 0.0), new THREE.Euler(0, 0, 0));
+      attach(E.rag, E.hero, "R", new THREE.Vector3(0.07, -0.026, 0.0), new THREE.Euler(0, 0, 0), 0.72);
+      attach(E.ragD, E.double, "R", new THREE.Vector3(0.07, -0.026, 0.0), new THREE.Euler(0, 0, 0), 0.72);
       const g = ragOnGlass(t);
       const k = smooth(u / 5);
-      cam(E, [-0.075 + 0.02 * k + wob(t * 0.5, 4) * 0.003, 1.335 + wob(t * 0.4, 5) * 0.002, 0.33 - 0.03 * k], [0.0, 1.31, 0.0], 36);
-      P.focus = 0.33 - 0.03 * k; mu.uDirt.value = 0.62; P.aperture = 16; P.maxCoc = 26; P.edgeBlur = 6; P.vol = 0.03; P.exposure = 1.1;
+      // вдоль стекла под скользящим углом: рука с тряпкой и её отражение встречаются у поверхности
+      cam(E, [-0.40 + 0.03 * k + wob(t * 0.5, 4) * 0.003, 1.36 - 0.01 * k + wob(t * 0.4, 5) * 0.002, 0.06 + 0.01 * k], [0.03 + 0.5 * g[0], 1.31, 0.0], 40);
+      P.focus = Math.hypot(-0.40 + 0.03 * k - g[0], 0.06); mu.uDirt.value = 0.62; P.aperture = 16; P.maxCoc = 26; P.edgeBlur = 6; P.vol = 0.03; P.exposure = 1.1;
       break;
     }
     case "s1c": {
@@ -710,5 +711,6 @@ export function direct(E: Engine, f: number): Hud {
     }
   }
   if (DBG.focus) P.focus = DBG.focus;
+  if (DBG.cam) { cam(E, DBG.cam, DBG.at, DBG.fov ?? E.cam.fov); }
   return hud;
 }

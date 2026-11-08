@@ -105,12 +105,12 @@ export class Droplets {
 }
 
 // ----------------------------------------------------------------------------- крепления к кистям
-export function attach(obj: THREE.Object3D, ch: Character, side: "L" | "R", ofs: THREE.Vector3, rot: THREE.Euler) {
+export function attach(obj: THREE.Object3D, ch: Character, side: "L" | "R", ofs: THREE.Vector3, rot: THREE.Euler, scale = 1) {
   ch.root.updateMatrixWorld(true);
   const hb = ch.bones["hand." + side];
   const HF = new THREE.Matrix4().setFromMatrix3(ch.hf[side]);
   if (HF.determinant() < 0) HF.multiply(new THREE.Matrix4().makeScale(1, 1, -1)); // правая кисть: собственный поворот (большой палец к -Z)
-  const O = new THREE.Matrix4().makeRotationFromEuler(rot).setPosition(ofs);
+  const O = new THREE.Matrix4().makeRotationFromEuler(rot).scale(new THREE.Vector3(scale, scale, scale)).setPosition(ofs);
   const M = hb.matrixWorld.clone().multiply(HF).multiply(O);
   obj.matrixAutoUpdate = false;
   if (obj.parent && obj.parent.matrixWorld) { const inv = obj.parent.matrixWorld.clone().invert(); obj.matrix.copy(inv.multiply(M)); }
