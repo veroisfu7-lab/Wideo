@@ -4,3 +4,8 @@ kapsula/out/*.wav
 kapsula/checks/*
 !kapsula/checks/.gitkeep
 __pycache__/
+nekrobios/out/*.mp4
+nekrobios/out/*.wav
+nekrobios/out/frames/
+nekrobios/checks/*
+!nekrobios/checks/.gitkeep
