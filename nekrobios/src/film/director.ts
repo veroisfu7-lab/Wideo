@@ -188,6 +188,7 @@ function heroDesk(t: number, phase: "a" | "b"): CS {
   } else {
     const u = t - 40;
     const f = new THREE.Vector3();
+    s.pos = [DESK.x - 0.06, 0, 0.8]; s.spine = [26, 0, 0]; s.chest = [18, -6, 0];
     s.armL = { t: toLocal(s, [1.66, y, 0.3]), fwd: dirLocal(s, [0, -0.3, -1]), back: dirLocal(s, [0, 1, 0]), pole: [0.8, -0.5, -0.3] };
     const k = seg(u, 4.2, 7.6);
     const tip = fingerTip(k);
@@ -557,13 +558,14 @@ export function direct(E: Engine, f: number): Hud {
     case "s3b": {
       E.hero.root.visible = true;
       E.folder.group.visible = true;
-      const hs = heroDesk(t, S.id === "s3a" ? "a" : "b"); apply(E.hero, hs);
-      E.hero.head.visible = false; E.hero.hair.visible = false;
-      for (const e of E.hero.eyes) e.visible = false;
-      // папка: въезжает справа, завязки, крышка
+      // папка: въезжает справа, завязки, крышка (до позы — палец ищет строки на листе)
       const fin = smooth(seg(t, 34.0, 34.65));
       E.folder.group.position.set(lerp(1.95, DESK.x, fin), BENCH.y + 0.001, DESK.z + 0.02);
       E.folder.group.rotation.set(0, Math.PI / 2 * 0 + lerp(0.25, 0.02, fin), 0);
+      E.folder.group.updateMatrixWorld(true);
+      const hs = heroDesk(t, S.id === "s3a" ? "a" : "b"); apply(E.hero, hs);
+      E.hero.head.visible = false; E.hero.hair.visible = false;
+      for (const e of E.hero.eyes) e.visible = false;
       const tieK = smooth(seg(t, EV.ties, EV.ties + 1.4));
       E.folder.ties.forEach((ti, i) => { ti.rotation.set(0, (i ? 1 : -1) * tieK * 1.1, 0); ti.position.x = E.folder.W / 2 - 0.01 + tieK * 0.03; });
       const open = inOut(seg(t, EV.coverOpen, EV.coverOpen + 1.4));
@@ -574,7 +576,7 @@ export function direct(E: Engine, f: number): Hud {
       const p = S.id === "s3b" ? seg(t, EV.diagram, EV.diagram + 4.2) : 0;
       const under = S.id === "s3b" ? seg(t, EV.finger, 47.6) : 0;
       if (S.id === "s3b" || open > 0.5) E.folder.drawPaper(p, t, under, S.id === "s3b" ? 0.5 * seg(t, 40.5, 42) : 0);
-      (E.folder.paper.material as THREE.MeshPhysicalMaterial).emissive.setRGB(0.12 * p, 0.12 * p, 0.12 * p);
+      (E.folder.paper.material as THREE.MeshPhysicalMaterial).emissive.setRGB(0.025 * p, 0.025 * p, 0.025 * p);
       if (S.id === "s3a") {
         const k = smooth(u / 7);
         cam(E, [DESK.x + wob(t * 0.4, 1) * 0.004, 1.58 - 0.08 * k, DESK.z + 0.03], [DESK.x, BENCH.y, DESK.z + 0.02], 48, 0);
@@ -588,7 +590,9 @@ export function direct(E: Engine, f: number): Hud {
         const h = lerp(0.42, 0.25, k1) + 0.09 * k2;
         cam(E, [c.x + 0.01, c.y + h, c.z + 0.035], [c.x, c.y, c.z], 46);
         E.cam.up.set(0, 0, -1); E.cam.position.set(c.x + 0.005, c.y + h, c.z + 0.03); E.cam.lookAt(c.x, c.y, c.z); E.cam.updateMatrixWorld(true);
-        P.focus = h; P.aperture = 9; P.edgeBlur = 9; P.maxCoc = 22;
+        E.world.benchTools.children[4].visible = false; // киянка не лезет в макро
+        P.focus = h; P.aperture = 9; P.edgeBlur = 9; P.maxCoc = 22; P.exposure = 0.48; P.bloom = 0.25; P.bloomThreshold = 1.6;
+        E.world.key.intensity = 3.0; E.world.key.color.set("#FFCC94");
         hud.quote = { a: seg(t, EV.finger - 0.3, EV.finger + 0.2), k: under };
       }
       P.vol = 0.0; P.exposure = 1.1;

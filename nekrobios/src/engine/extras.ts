@@ -241,10 +241,10 @@ export class Folder {
   drawPaper(p: number, t: number, under: number, glow: number) {
     const c = this.paperCanvas.getContext("2d")!; const w = 1536, h = 2100;
     c.drawImage(this.paperBase, 0, 0);
-    const ink = "rgba(28,34,52,0.92)";
+    const ink = "rgba(18,22,40,0.97)";
     const X0 = 140, Y0 = 320, Wd = w - 280, Hd = 980;
     const seg = (a: number, b: number) => Math.max(0, Math.min(1, (p - a) / (b - a)));
-    const line = (x1: number, y1: number, x2: number, y2: number, k: number, col = ink, lw = 4) => {
+    const line = (x1: number, y1: number, x2: number, y2: number, k: number, col = ink, lw = 7) => {
       if (k <= 0) return; c.strokeStyle = col; c.lineWidth = lw; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 + (x2 - x1) * k, y1 + (y2 - y1) * k); c.stroke();
     };
     // 1) стекло и ртуть (вертикальные слои)
@@ -253,7 +253,7 @@ export class Folder {
     c.fillStyle = `rgba(150,180,200,${0.35 * k1})`; c.fillRect(gx, Y0 + 60, 60, (Hd - 120) * k1);
     c.fillStyle = `rgba(150,155,165,${0.85 * k1})`; c.fillRect(mx, Y0 + 60, 26, (Hd - 120) * k1);
     line(gx, Y0 + 60, gx, Y0 + Hd - 60, k1); line(gx + 60, Y0 + 60, gx + 60, Y0 + Hd - 60, k1); line(mx + 26, Y0 + 60, mx + 26, Y0 + Hd - 60, k1);
-    c.fillStyle = ink; c.font = "400 30px HMono";
+    c.fillStyle = ink; c.font = "400 38px HMono";
     if (k1 > 0.6) { c.globalAlpha = (k1 - 0.6) / 0.4; c.fillText("СТЕКЛО", gx - 120, Y0 + 40); c.fillText("РТУТЬ", mx - 10, Y0 + Hd - 20); c.globalAlpha = 1; }
     // 2) бесконечный коридор за амальгамой (перспектива)
     const k2 = seg(0.15, 0.5);
@@ -263,10 +263,10 @@ export class Folder {
       if (kk <= 0) break;
       const s = Math.pow(0.68, i + ((t * 0.35) % 1));
       const x0 = mx + 40 + (vx - mx - 40) * (1 - s), hh = (Hd - 160) * 0.5 * s, ww = (vx - mx - 40) * 0.28 * s;
-      c.strokeStyle = `rgba(28,34,52,${0.85 * kk * (0.4 + 0.6 * s)})`; c.lineWidth = 3;
+      c.strokeStyle = `rgba(18,22,40,${0.9 * kk * (0.5 + 0.5 * s)})`; c.lineWidth = 6;
       c.strokeRect(x0, vy - hh, ww + 30 * s, hh * 2);
     }
-    if (k2 > 0) { for (const [ax, ay] of [[mx + 40, Y0 + 80], [mx + 40, Y0 + Hd - 80]]) line(ax, ay, vx, vy, k2, "rgba(28,34,52,0.5)", 2); }
+    if (k2 > 0) { for (const [ax, ay] of [[mx + 40, Y0 + 80], [mx + 40, Y0 + Hd - 80]]) line(ax, ay, vx, vy, k2, "rgba(18,22,40,0.6)", 4); }
     // 3) наблюдатель: профиль головы слева и глаз
     const k3 = seg(0.3, 0.55);
     if (k3 > 0) {
@@ -280,12 +280,12 @@ export class Folder {
     const cy = Y0 + Hd * 0.5;
     for (const dy of [-150, 0, 150]) {
       const ax = X0 + 230, ay = cy - 50 + dy * 0.3, bx = mx + 13, by = cy + dy;
-      line(ax, ay, bx, by, k4, "rgba(150,20,24,0.9)", 4);
+      line(ax, ay, bx, by, k4, "rgba(170,16,22,0.95)", 7);
       if (k4 >= 1) { const ang = Math.atan2(by - ay, bx - ax); c.fillStyle = "rgba(150,20,24,0.9)"; c.beginPath(); c.moveTo(bx, by); c.lineTo(bx - 26 * Math.cos(ang - 0.35), by - 26 * Math.sin(ang - 0.35)); c.lineTo(bx - 26 * Math.cos(ang + 0.35), by - 26 * Math.sin(ang + 0.35)); c.fill(); }
       if (k4 > 0.3) for (let j = 0; j < 7; j++) {
         const u = ((t * 0.45 + j / 7 + dy * 0.001) % 1);
         const px = ax + (bx - ax) * u, py = ay + (by - ay) * u + Math.sin(u * 12 + j) * 10;
-        c.fillStyle = `rgba(0,190,210,${0.9 * (1 - u * 0.5)})`; c.beginPath(); c.arc(px, py, 7 * (1 - u * 0.6), 0, 7); c.fill();
+        c.fillStyle = `rgba(0,170,200,${0.95 * (1 - u * 0.4)})`; c.beginPath(); c.arc(px, py, 11 * (1 - u * 0.5), 0, 7); c.fill();
       }
     }
     // частицы внутри коридора

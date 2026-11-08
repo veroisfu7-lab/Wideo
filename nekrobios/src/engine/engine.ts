@@ -170,11 +170,11 @@ export class Engine {
     this.wrench.layers.set(LAYER.BOTH);
     (this.folder.paper.material as THREE.MeshPhysicalMaterial).emissive.setRGB(0, 0, 0);
     const w = this.world;
-    w.key.intensity = 9; w.bulbMat.color.setRGB(40, 24, 9); w.coneMat.uniforms.uK.value = 0.05; w.dustMat.uniforms.uK.value = 1;
+    w.key.intensity = 9; w.key.color.set('#FFA448'); w.bulbMat.color.setRGB(40, 24, 9); w.coneMat.uniforms.uK.value = 0.05; w.dustMat.uniforms.uK.value = 1;
     w.rim.intensity = 4; w.fill.intensity = 0.7; w.moon.intensity = 2; w.amb.intensity = 0.12;
     w.mkey.intensity = 3.2; w.mkey.color.set('#FFB070'); w.mfill.intensity = 0.6; w.mkey.position.set(0.55, 2.0, -0.9);
     w.key.position.copy(LAMP.pos); w.key.target.position.set(LAMP.pos.x - 0.35, 0, LAMP.pos.z - 0.15);
-    w.benchTools.position.set(0, 0, 0);
+    w.benchTools.position.set(0, 0, 0); w.benchTools.children.forEach((c) => (c.visible = true));
   }
 
   render() {
