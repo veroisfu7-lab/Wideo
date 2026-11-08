@@ -7,7 +7,7 @@ export const SHOTS: [ShotId, number, number][] = [
   ["s3a", 33, 40], ["s3b", 40, 48],
   ["s4a", 48, 55], ["s4b", 55, 66],
   ["s5a", 66, 73], ["s5b", 73, 81],
-  ["s6a", 81, 85.5], ["s6b", 85.5, 87.8], ["end", 87.8, 90],
+  ["s6a", 81, 85.2], ["s6b", 85.2, 87.8], ["end", 87.8, 90],
 ];
 export const TOTAL = 5400;
 export function shotAt(f: number): { id: ShotId; t: number; u: number; dur: number; t0: number } {
@@ -26,5 +26,5 @@ export const EV = {
   metal: 55.6, eyes: 57.0, grin: 58.6, palm: 62.4, critical: 63.2,
   jumpBack: 66.05, grab: 67.4, scream: 67.9, swingUp: 70.4, impact: 72.95,
   liquid: 73.0, claw: 75.0, grabWrist: 75.8, pull: 76.6,
-  calm: 81.0, sleeves: 81.8, hair: 83.4, turn: 85.6, glint: 86.5, whisper: 86.9, cut: 87.8, title1: 88.0, title2: 88.7,
+  calm: 81.0, sleeves: 81.8, hair: 83.1, turn: 85.3, glint: 86.25, whisper: 86.42, cut: 87.8, title1: 88.0, title2: 88.7,
 };

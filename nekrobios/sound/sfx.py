@@ -58,7 +58,7 @@ class Bus:
         j = min(N, i + sig.shape[1])
         if i < 0: sig = sig[:, -i:]; j = min(N, sig.shape[1]); i = 0
         self.buf[:, i:j] += sig[:, : j - i] * db(gain_db)
-music = Bus(); fx = Bus(); amb = Bus()
+music = Bus(); fx = Bus(); amb = Bus(); vox = Bus()
 EVENTS = []
 def ev(name, t, g=0.0): EVENTS.append((round(t, 3), name, g))
 
@@ -67,7 +67,7 @@ EV = dict(plate=0.6, polishStart=6.0, ragToss=11.35, ragLand=11.85, desyncHud=12
           dashTable=33.0, toolsSweep=33.7, folderSlap=34.6, ties=35.6, coverOpen=37.6, diagram=40.3, finger=44.2,
           dblArms=48.6, dblTilt=50.3, step1=51.4, step2=52.6, step3=53.7, metal=55.6, eyes=57.0, grin=58.6, palm=62.4, critical=63.2,
           jumpBack=66.05, grab=67.4, scream=67.9, swingUp=70.4, impact=72.95, claw=75.0, grabWrist=75.8, pull=76.6,
-          calm=81.0, sleeves=81.8, hair=83.4, turn=85.6, glint=86.5, whisper=86.9, cut=87.8, title1=88.0, title2=88.7)
+          calm=81.0, sleeves=81.8, hair=83.1, turn=85.3, glint=86.25, whisper=86.42, cut=87.8, title1=88.0, title2=88.7)
 
 # ============================================================== ПАРТИТУРА
 t = np.arange(N) / SR
@@ -269,7 +269,16 @@ def scream(d=0.9):
     s = sum(a * bp(src, fc * 0.85, fc * 1.15) for fc, a in [(750, 1.0), (1250, 0.6), (2650, 0.35), (3500, 0.15)])
     s = np.tanh(s * 2.5) * env_adsr(len(tt), 0.06, 0.1, 0.9, 0.3)
     return s
-fx.put(reverb(scream(0.9), IR_ROOM, 0.35), EV["scream"], -5); ev("scream", EV["scream"])
+def load_wav(path):
+    with wave.open(path) as w:
+        sr0 = w.getframerate(); ch = w.getnchannels(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float64) / 32768
+    if ch == 2: x = x.reshape(-1, 2).mean(1)
+    from scipy.signal import resample_poly
+    return resample_poly(x, SR, sr0)
+VO = os.path.join(HERE, "voice")
+scr = load_wav(os.path.join(VO, "scream_el_alexandr.wav")); scr = scr / (np.max(np.abs(scr)) + 1e-9)
+vox.put(reverb(scr, IR_ROOM, 0.3), EV["scream"] - 0.05, -3); ev("scream (Speko/ElevenLabs)", EV["scream"])
+fx.put(reverb(scream(0.9), IR_ROOM, 0.35), EV["scream"], -20)
 for x in (69.1, 69.9): fx.put(thud(75, 0.35, 700), x, -6);
 ev("heavy steps", 69.1)
 fx.put(whoosh(0.7, 200, 4000, 0.7), EV["impact"] - 0.65, -2); ev("swing", EV["impact"] - 0.65)
@@ -290,24 +299,63 @@ fx.put(bp(noise(int(0.9 * SR)), 2500, 9000) * env_adsr(int(0.9 * SR), 0.1, 0.2, 
 fx.put(reverb(squeak(2.5, 260) * 0.4, IR_BIG, 0.5), 82.0, -22); ev("prints sliding", 82.0)
 fx.put(cloth(0.7) * 0.6, EV["turn"], -16)
 fx.put(reverb(metal_ring(2637, 1.2) * 0.6, IR_BIG, 0.5), EV["glint"], -14); ev("glint ting", EV["glint"])
-# шёпот «Ты следующий»
-wpath = os.path.join(HERE, "whisper.wav")
-subprocess.run(["espeak-ng", "-v", "ru+whisper", "-s", "175", "-p", "25", "-w", wpath, "Ты следующий"], check=True)
-with wave.open(wpath) as w:
-    sr0 = w.getframerate(); raw = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float64) / 32768
-nz = np.where(np.abs(raw) > 0.01)[0]; raw = raw[nz[0]: nz[-1] + 1]
-from scipy.signal import resample
-wsp = resample(raw, int(len(raw) * SR / sr0))
-low = resample(raw, int(len(raw) * SR / sr0 * 1.12))  # ниже на ~2 полутона
-wsp = hp(wsp, 300) + 0.5 * hp(low[: len(wsp)] if len(low) >= len(wsp) else np.pad(low, (0, len(wsp) - len(low))), 200)
-wsp = wsp / (np.max(np.abs(wsp)) + 1e-9)
-fx.put(reverb(wsp, IR_ROOM, 0.25), EV["whisper"], -6, 0.15); ev("whisper 'Ты следующий'", EV["whisper"])
+# шёпот «Ты следующий» — Speko (ElevenLabs v3, голос Miron, [whispers]); пауза укорочена, тень на октаву ниже
+wsp = load_wav(os.path.join(VO, "whisper_el_miron.wav"))
+def cut(x, a, b): return x[int(a * SR): int(b * SR)]
+ty = cut(wsp, 0.08, 0.47); sl = cut(wsp, 0.93, 1.80)
+gap = np.zeros(int(0.12 * SR))
+wsp2 = np.concatenate([ty * np.hanning(len(ty)) ** 0.15, gap, sl * np.hanning(len(sl)) ** 0.15])
+wsp2 = wsp2 / (np.max(np.abs(wsp2)) + 1e-9)
+from scipy.signal import resample_poly
+low = resample_poly(wsp2, 3, 2)[: len(wsp2)]  # ниже ~на квинту, тише
+vox_sig = hp(wsp2, 120) + 0.35 * lp(low, 2500)
+vox.put(reverb(vox_sig, IR_ROOM, 0.22), EV["whisper"], -2, 0.1); ev("whisper 'Ты следующий' (Speko)", EV["whisper"])
+# огибающая для губ (60 к/с)
+hop = SR // 60; env = np.array([np.sqrt(np.mean(wsp2[i:i + hop] ** 2)) for i in range(0, len(wsp2), hop)])
+env = env / (env.max() + 1e-9)
+tsl = len(ty) / SR + 0.12
+lip = []
+for k, e in enumerate(env):
+    tt = k / 60; jaw = float(np.clip(e * 1.3, 0, 1)) * 0.32
+    puck = 0.0
+    if tsl + 0.25 < tt < tsl + 0.58: puck = 0.85
+    lip.append([round(tt, 4), round(jaw, 3), puck])
+json.dump({"start": EV["whisper"], "frames": lip}, open(os.path.join(HERE, "..", "src", "film", "lipsync.json"), "w"))
+# голос ИИ телефона — Speko (Cartesia, Daria): через «динамик» телефона
+def phone_voice(x): return np.tanh(bp(x, 320, 6500, 3) * 1.6) * 0.8
+m1 = load_wav(os.path.join(VO, "ai_match_daria.wav")); m1 = cut(m1, 0.0, 4.0)
+vox.put(reverb(phone_voice(m1 / (np.max(np.abs(m1)) + 1e-9)), IR_ROOM, 0.12), EV["trackLabel"] + 0.15, -5, 0.2); ev("AI voice: match (Speko)", EV["trackLabel"] + 0.15)
+er = load_wav(os.path.join(VO, "ai_error_daria_fast.wav"))
+parts = [cut(er, 0.0, 0.86), cut(er, 1.1, 3.0), cut(er, 3.25, 4.9), cut(er, 5.2, 6.3)]
+g2 = np.zeros(int(0.1 * SR)); er2 = np.concatenate(sum([[p_, g2] for p_ in parts], [])[:-1])
+import subprocess as sp
+tmp_in = os.path.join(OUT, "_er_in.wav"); tmp_out = os.path.join(OUT, "_er_out.wav")
+with wave.open(tmp_in, "wb") as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(er2 / (np.max(np.abs(er2)) + 1e-9), -1, 1) * 32000).astype(np.int16).tobytes())
+sp.run(["ffmpeg", "-v", "error", "-y", "-i", tmp_in, "-af", "atempo=1.31", tmp_out], check=True)
+er3 = load_wav(tmp_out)
+print("error line dur", round(len(er3) / SR, 2))
+vox.put(reverb(phone_voice(er3), IR_ROOM, 0.12), EV["errorWin"] - 0.1, -4, 0.2); ev("AI voice: object 02 alert (Speko)", EV["errorWin"] - 0.1)
 # жёсткая склейка в чёрное + титры
 fx.put(np.sin(2 * np.pi * 32 * T(2.0)) * np.exp(-T(2.0) * 1.2), EV["cut"], -2); ev("hard cut sub", EV["cut"])
 fx.put(glitch(0.35, 11), EV["title1"], -8); fx.put(glitch(0.25, 12), EV["title2"], -10); ev("title glitch", EV["title1"])
 
 # ============================================================== сведение
-mix = music.buf * db(-3) + fx.buf * db(0) + amb.buf * db(-2)
+VOX_DB = float(os.environ.get("VOX_DB", "6"))
+rest = music.buf * db(-3) + fx.buf * db(0) + amb.buf * db(-2)
+# приглушение подложки под голосом (сайдчейн): −7 дБ, атака 60 мс, отпуск 350 мс
+ve = np.abs(vox.buf).mean(0); hopd = 480
+venv = np.repeat([ve[i:i + hopd].max() for i in range(0, N, hopd)], hopd)[:N]
+on = (venv > 0.02).astype(float)
+duck = np.zeros(N); a_ = 1 - np.exp(-1 / (0.06 * SR / hopd)); r_ = 1 - np.exp(-1 / (0.35 * SR / hopd)); y = 0.0
+onb = on[::hopd]; dd = np.zeros(len(onb))
+for i, o in enumerate(onb): y += (o - y) * (a_ if o > y else r_); dd[i] = y
+duck = np.repeat(dd, hopd)[:N]
+rest = rest * db(-7 * duck)
+mix = rest + vox.buf * db(VOX_DB)
+for name, a, b in (("AI match", 19.15, 22.5), ("AI alert", 28.5, 32.9), ("scream", 67.85, 68.9), ("whisper", 86.42, 87.7)):
+    i, j = int(a * SR), int(b * SR)
+    rv = 20 * np.log10(np.sqrt(np.mean(vox.buf[:, i:j] ** 2)) * db(VOX_DB) + 1e-12); rr = 20 * np.log10(np.sqrt(np.mean(rest[:, i:j] ** 2)) + 1e-12)
+    print(f"{name:10s} voice {rv:6.1f} dB  bed {rr:6.1f} dB  margin {rv - rr:+.1f}")
 # жёсткая тишина ровно на склейке (кроме суба/глитча) — уже заложено уровнями
 fade_in = np.clip(t / 0.6, 0, 1); mix *= fade_in
 fade_out = 1 - np.clip((t - 89.6) / 0.4, 0, 1); mix *= fade_out
@@ -317,7 +365,7 @@ def write(path, x):
     with wave.open(path, "wb") as w: w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(y.tobytes())
 pk = np.max(np.abs(mix)); mix = mix / pk * 0.5
 write(os.path.join(OUT, "audio_pre.wav"), mix)
-for name, b in (("music", music.buf), ("sfx", fx.buf), ("amb", amb.buf)):
+for name, b in (("music", music.buf), ("sfx", fx.buf), ("amb", amb.buf), ("vox", vox.buf)):
     write(os.path.join(OUT, f"stem_{name}.wav"), b / (np.max(np.abs(b)) + 1e-9) * 0.5)
 json.dump(EVENTS, open(os.path.join(OUT, "sfx_events.json"), "w"), ensure_ascii=False, indent=0)
 print("events", len(EVENTS))

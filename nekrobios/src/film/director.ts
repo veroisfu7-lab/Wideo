@@ -9,6 +9,7 @@ import { BENCH, LAMP } from "../engine/world";
 import { CS, apply, restState, restArm, toWorld, toLocal, dirLocal, lagged, mix, clone } from "./pose";
 import { V3, clamp01, smooth, smoother, inOut, outCubic, inCubic, keys, keysV, lerp, lerpV, seg, wob, shake, hash } from "./anim";
 import { EV, FPS, shotAt } from "./shots";
+import LIP from "./lipsync.json";
 
 const DBG = getInputProps() as any;
 const v3 = (a: V3) => new THREE.Vector3(...a);
@@ -379,9 +380,9 @@ function imposter(t: number): CS {
   s.armL = { t: lerpV(restArm("L").t, lerpV([0.0, 1.12, 0.3], cuffR, pull), sl), fwd: lerpV(restArm("L").fwd, [-1, -0.2, 0], sl), back: lerpV(restArm("L").back, [0, 1, 0.3], sl), pole: [0.7, -0.6, -0.3] };
   s.fingL = mixHand(HANDS.relaxed, HANDS.grip, sl);
   // поправляет волосы
-  const hk = smooth(seg(u, 2.4, 3.0)) * (1 - smooth(seg(u, 3.6, 4.3)));
+  const hk = smooth(seg(u, 2.1, 2.7)) * (1 - smooth(seg(u, 3.3, 4.0)));
   if (hk > 0) {
-    const hair: V3 = [-0.06 + 0.04 * Math.sin((u - 2.8) * 5) * (u > 2.9 ? 1 : 0), 1.86, 0.05];
+    const hair: V3 = [-0.06 + 0.04 * Math.sin((u - 2.5) * 5) * (u > 2.6 ? 1 : 0), 1.86, 0.05];
     s.armR = { t: lerpV(s.armR.t, hair, hk), fwd: lerpV(s.armR.fwd, [0.6, 0.5, 0.6], hk), back: lerpV(s.armR.back, [-0.3, 0.8, -0.5], hk), pole: [-0.9, 0.0, -0.4] };
     s.fingR = mixHand(HANDS.relaxed, HANDS.claw, hk * 0.6);
   }
@@ -390,21 +391,16 @@ function imposter(t: number): CS {
   return s;
 }
 function imposterTurn(t: number): CS {
-  const u = t - 85.5;
+  const u = t - 85.2;
   const s = stand(0.02, 0.70, 180);
-  const k = smoother(seg(u, 0.12, 0.95));
+  const k = smoother(seg(u, 0.1, 0.95));
   s.head = [keys(u, [[0, 0], [0.5, -3], [1, 0]]), -78 * k, 0]; s.neck = [0, -14 * k, 0]; s.chest = [0, -10 * k, 0];
   s.gaze = [0.6, 1.69, 0.70];
   if (u < 0.6) s.gaze = [0.02 + (0.6 - 0.02) * k, 1.69, 0.2 + 0.5 * k];
-  // «Ты следующий»
-  const w0 = EV.whisper;
-  const tt = t - w0;
-  if (tt > 0 && tt < 0.9) {
-    const syl = [[0.0, 0.12, 0.0], [0.12, 0.3, 0.05], [0.24, 0.08, 0.0], [0.36, 0.22, 0.1], [0.5, 0.08, 0.9], [0.62, 0.12, 0.8], [0.75, 0.15, 0.1], [0.9, 0, 0]];
-    let jaw = 0, puck = 0;
-    for (let i = 1; i < syl.length; i++) if (tt <= syl[i][0]) { const a = syl[i - 1], b = syl[i]; const x = smooth((tt - a[0]) / (b[0] - a[0])); jaw = lerp(a[1], b[1], x); puck = lerp(a[2], b[2], x); break; }
-    s.morph.jaw = jaw * 0.6; s.morph.pucker = puck * 0.8;
-  }
+  // «Ты следующий» — по огибающей шёпота (sound/sfx.py → lipsync.json)
+  const li = Math.round((t - (LIP as any).start) * 60);
+  const fr = (LIP as any).frames as number[][];
+  if (li >= 0 && li < fr.length) { s.morph.jaw = fr[li][1]; s.morph.pucker = fr[li][2]; }
   return s;
 }
 
@@ -689,7 +685,7 @@ export function direct(E: Engine, f: number): Hud {
       E.wrench.rotation.set(0, -0.9, 0);
       mu.uPrints.value.set(0.36, 0.02 + 0.075 * smooth(seg(u, 0, 4.5)), 0, 1);
       mu.uDirt.value = 0.82;
-      const k = smooth(u / 4.5);
+      const k = smooth(u / 4.2);
       cam(E, [0.95 + wob(t * 0.2, 1) * 0.003, 1.22, 3.25 - 0.1 * k], [0.08, 1.02, 0.25], 50);
       P.focus = 2.7; P.aperture = 6; P.edgeBlur = 8; P.vol = 0.08;
       break;
@@ -699,7 +695,7 @@ export function direct(E: Engine, f: number): Hud {
       apply(E.hero, imposterTurn(t));
       const g = Math.exp(-Math.pow((t - EV.glint) / 0.07, 2));
       E.hero.EU.uGlint.value = g; E.hero.EU.uMetal.value = 0.12 * g;
-      const k = smooth(u / 2.3);
+      const k = smooth(u / 2.6);
       cam(E, [0.6 - 0.04 * k, 1.70, 0.70], [0.0, 1.675, 0.70], 28);
       P.focus = 0.6 - 0.04 * k - 0.07; P.aperture = 11; P.maxCoc = 20; P.edgeBlur = 8; P.vol = 0.0;
       mu.uPrints.value.set(0.36, 0.1, 0, 1);
