@@ -358,13 +358,13 @@ function heroSink(tau: number, t: number): CS {
   // кисть: от удара тонет к стеклу, потом утягивается внутрь
   const sinkK = smooth(clamp01(tau / 0.6));
   const pull = smooth(clamp01((tau - 0.8) / 1.1));
-  const w: V3 = [0.26 - 0.18 * sinkK - 0.03 * pull, 1.43 - 0.08 * sinkK - 0.02 * pull, 0.24 - 0.14 * sinkK - 0.2 * pull];
+  const w: V3 = [0.26 - 0.18 * sinkK - 0.02 * pull, 1.43 - 0.08 * sinkK - 0.02 * pull, 0.24 - 0.14 * sinkK - 0.22 * pull];
   armW(s, "R", w, nrm([-0.3, 0.3, -1]), nrm([0, 1, 0.2]), [-0.8, 0.2, -0.4]);
   s.fingR = HANDS.grip;
   s.armL = { t: [0.26, 1.0, -0.05], fwd: [0.1, -1, 0.1], back: [1, 0, 0], pole: [0.7, -0.6, -0.4] };
   s.fingL = HANDS.relaxed;
   s.morph.wide = 1; s.morph.jaw = 0.8;
-  s.spine[0] += 8 * pull; s.chest[0] += 6 * pull;
+  s.spine[0] += 5 * pull; s.chest[0] += 4 * pull;
   void t;
   return s;
 }
@@ -675,9 +675,9 @@ export function direct(E: Engine, f: number): Hud {
       E.claw.U.uWet.value = 1;
       E.drops.mesh.visible = true; E.drops.smoke.visible = true; E.drops.update(tau, v3(IMPACT).add(new THREE.Vector3(0, 0, 0.02)), 1);
       const k = smooth(u / 8);
-      const back = smooth(seg(u, 4.5, 8));
-      cam(E, [-0.24 - 0.08 * back, 1.42 + 0.03 * back, 0.36 + 0.2 * back], [0.04, 1.33, 0.02], 36 + 6 * back);
-      P.focus = E.cam.position.distanceTo(new THREE.Vector3(0.05, 1.33, 0.06)); P.aperture = 12; P.maxCoc = 22; P.edgeBlur = 8; P.vol = 0.02;
+      const w2 = smooth(seg(u, 4.4, 8));
+      cam(E, [-0.24 - 0.05 * w2, 1.42 - 0.02 * k + 0.02 * w2, 0.36 + 0.02 * k + 0.05 * w2], [0.04 - 0.02 * w2, 1.33, 0.03 - 0.03 * w2], 36 + 4 * w2);
+      P.focus = E.cam.position.distanceTo(new THREE.Vector3(0.04, 1.33, 0.04)); P.aperture = 12; P.maxCoc = 22; P.edgeBlur = 8; P.vol = 0.02;
       mu.uGlow.value.setRGB(0.0, 0.01 * seg(tau, 0, 0.3), 0.012 * seg(tau, 0, 0.3));
       P.flash = 0.12 * Math.exp(-u * 5);
       P.chroma = 2.0;

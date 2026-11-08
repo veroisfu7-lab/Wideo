@@ -28,7 +28,7 @@ export class Claw {
     patch(this.mat, {
       key: "claw", uniforms: this.U as any,
       vDecl: "attribute float claw; varying float vClaw;", vMain: "vClaw = claw;", fDecl: "varying float vClaw;",
-      fColor: `vec3 ash = vec3(0.33, 0.34, 0.35) * (0.7 + 0.5 * vnoise(vLocal * 120.0));
+      fColor: `vec3 ash = vec3(0.52, 0.53, 0.55) * (0.75 + 0.45 * vnoise(vLocal * 120.0));
         vec3 merc = vec3(0.75, 0.8, 0.85);
         float wet = smoothstep(0.35, 0.7, fbm3(vLocal * 40.0)) * uWet;
         vec3 c = mix(ash, merc, wet * 0.8);
