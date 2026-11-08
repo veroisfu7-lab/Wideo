@@ -214,6 +214,8 @@ def subrise(sec):
     t = tt(sec); f = 40 + 25 * t / sec
     return fade(np.sin(2 * np.pi * np.cumsum(f) / SR) * (t / sec) ** 1.5 + lp(nz(sec), 120) * 0.3 * t / sec, 0.5, 0.05)
 
+CUT = round((next(x for x in shots if x["id"] == "end")["voAt"] + vod["end"] + 0.2) * FPS)
+
 # ------------------------------------------------------------------ ГОЛОС
 for s in shots:
     with wave.open(f"{ROOT}/public/vo/{s['id']}.wav") as w:
@@ -341,12 +343,12 @@ put("sfx", trill(), at("dawn", 120), -14, 0.6)
 put("mus", pad(L("dawn") + 1, [110, 138.6, 164.8, 220], 1, 900), at("dawn", 0), -17)
 
 put("sfx", crunch(), at("track", 2), -10)
-put("amb", subrise(L("track") + LEN["end"] / FPS * 0 + 62 / FPS), at("track", 0), -13)
+put("amb", subrise(L("track") + CUT / FPS), at("track", 0), -13)
 for k in range(10, 70, 12): put("sfx", beep(2600, 0.05, 0.02), at("track", k), -18)
 for k in (30, 42, 54): put("sfx", beep(520, 0.12, 0.08), at("track", k), -12)
 for k in range(112, LEN["track"], 12): put("sfx", beep(990, 0.1, 0.06), at("track", k), -12)
 
-CUT = 62; TITLES = [CUT + 6, CUT + 34, CUT + 64]
+CUT = round((next(x for x in shots if x["id"] == "end")["voAt"] + vod["end"] + 0.2) * FPS); TITLES = [CUT + 6, CUT + 34, CUT + 64]
 put("sfx", taiko(), at("end", CUT), 0)
 put("sfx", boom(120, 30, 3.0), at("end", CUT), -4)
 for k in TITLES[1:]: put("sfx", lp(taiko(), 2000), at("end", k), -9)

@@ -53,7 +53,7 @@ const Captions: React.FC = () => {
 
 const TopBar: React.FC = () => {
   const f = useCurrentFrame();
-  const endFrom = PLACED[PLACED.length - 1].from + 62;
+  const endFrom = PLACED[PLACED.length - 1].from + S3.CUT;
   if (f >= endFrom) return null;
   const dot = Math.floor(f / 15) % 2 === 0;
   return (

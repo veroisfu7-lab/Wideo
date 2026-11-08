@@ -4,6 +4,9 @@ import { useCurrentFrame } from "remotion";
 import { C, Fill, Svg, Defs, Fog, Pop, Label, Type, GlitchBars, ip, EO, EIO, rnd, noise1, shake, W, MONO, COND } from "./lib";
 import { Ridge, Conifer, Trunk, Fire, FireDefs, MossClump, Hunter, CreatureEyes, TallFigure, PAL_NIGHT, PAL_FIRE, PAL_DUSK } from "./art";
 import { SergeyBust } from "./shots1";
+import VO from "../tools/vo_durations.json";
+import SHOTS from "./shots.json";
+const SHOT_END = SHOTS.find((x) => x.id === "end")!;
 
 type P = { d: number };
 
@@ -325,7 +328,8 @@ export const Track: React.FC<P> = ({ d }) => {
 };
 
 // -------------------------------------------------------------- 17. КЛИФФХЭНГЕР
-export const CUT = 62;
+// обрыв в чёрное — сразу после финального вопроса рассказчика
+export const CUT = Math.round((SHOT_END.voAt + (VO as Record<string, number>).end + 0.2) * 30);
 export const TITLES = [CUT + 6, CUT + 34, CUT + 64];
 export const End: React.FC<P> = ({ d }) => {
   const f = useCurrentFrame();
