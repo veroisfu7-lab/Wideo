@@ -11,3 +11,5 @@ nekrobios/checks/*
 !nekrobios/checks/.gitkeep
 nekrobios/out/*
 !nekrobios/out/.gitkeep
+# мастер ролика >100 МБ (лимит GitHub) — хранится локально
+Некробиос.mp4
