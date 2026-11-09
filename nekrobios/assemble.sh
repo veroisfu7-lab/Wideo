@@ -11,6 +11,6 @@ for f in os.listdir(d):
 n = len([f for f in os.listdir(d) if f.endswith(".jpeg")]); print("frames", n)
 PY
 ffmpeg -v error -y -framerate 60 -i out/seq/element-%04d.jpeg -i out/audio.wav -map 0:v -map 1:a \
-  -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -profile:v high -movflags +faststart \
+  -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p -profile:v high -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -movflags +faststart \
   -c:a aac -b:a 192k -shortest "../Некробиос.mp4"
 ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,duration -of compact "../Некробиос.mp4"
