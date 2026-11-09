@@ -21,7 +21,7 @@ export const HANDS: Record<string, HandPose> = {
   point: { thumb: { curl: 40, spread: -12 }, index: { curl: 4 }, middle: { curl: 80 }, ring: { curl: 86 }, pinky: { curl: 88 } },
   flat: { thumb: { curl: 4, spread: 12 }, index: { curl: 2, spread: 4 }, middle: { curl: 2 }, ring: { curl: 3, spread: -4 }, pinky: { curl: 4, spread: -9 } },
   claw: { thumb: { curl: 30, spread: 15 }, index: { curl: 45, tip: 50 }, middle: { curl: 48, tip: 55 }, ring: { curl: 50, tip: 55 }, pinky: { curl: 52, tip: 58 } },
-  rag: { thumb: { curl: 34, spread: -14 }, index: { curl: 40, spread: -4 }, middle: { curl: 42 }, ring: { curl: 44, spread: 3 }, pinky: { curl: 46, spread: 5 } },
+  rag: { thumb: { curl: 16, spread: -8 }, index: { curl: 14, spread: -2 }, middle: { curl: 15 }, ring: { curl: 17, spread: 2 }, pinky: { curl: 19, spread: 3 } },
 };
 export const mixHand = (a: HandPose, b: HandPose, t: number): HandPose => {
   const o: any = {};

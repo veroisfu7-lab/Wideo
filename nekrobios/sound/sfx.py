@@ -67,7 +67,7 @@ EV = dict(plate=0.6, polishStart=6.0, ragToss=11.35, ragLand=11.85, desyncHud=12
           dashTable=33.0, toolsSweep=33.7, folderSlap=34.6, ties=35.6, coverOpen=37.6, diagram=40.3, finger=44.2,
           dblArms=48.6, dblTilt=50.3, step1=51.4, step2=52.6, step3=53.7, metal=55.6, eyes=57.0, grin=58.6, palm=62.4, critical=63.2,
           jumpBack=66.05, grab=67.4, scream=67.9, swingUp=70.4, impact=72.95, claw=75.0, grabWrist=75.8, pull=76.6,
-          calm=81.0, sleeves=81.8, hair=83.1, turn=85.3, glint=86.25, whisper=86.42, cut=87.8, title1=88.0, title2=88.7)
+          calm=81.0, sleeves=81.8, hair=83.1, turn=85.3, glint=86.25, whisper=86.42, cut=87.8, title1=88.0, title2=88.4)
 
 # ============================================================== ПАРТИТУРА
 t = np.arange(N) / SR
@@ -243,7 +243,14 @@ ev("tools clatter", EV["toolsSweep"])
 fx.put(S(thud(110, 0.4, 2000), 0.6 * bp(noise(len(T(0.4))), 300, 2000) * np.exp(-T(0.4) * 20)), EV["folderSlap"], -4); ev("folder slap", EV["folderSlap"])
 for x in np.arange(EV["ties"], EV["ties"] + 1.3, 0.22): fx.put(bp(noise(int(0.18 * SR)), 1500, 6000) * np.hanning(int(0.18 * SR)), x, -18, 0.4)
 ev("strings untie", EV["ties"])
-fx.put(S(scrape(1.2, 700) * 0.6, squeak(1.0, 400) * 0.15), EV["coverOpen"], -12); fx.put(cloth(0.6) * 0.7, EV["coverOpen"] + 0.8, -12); ev("cover open", EV["coverOpen"])
+fx.put(S(scrape(1.2, 700) * 0.6, squeak(1.0, 400) * 0.15), EV["coverOpen"], -3); fx.put(cloth(0.6) * 0.7, EV["coverOpen"] + 0.8, -4); fx.put(thud(150, 0.3, 1500), EV["coverOpen"] + 1.35, -8); ev("cover open", EV["coverOpen"])
+# оживающая схема: штрихи пера по стадиям, свист частиц, электрические щелчки
+stages = [(40.3, 1.0), (41.0, 1.4), (41.6, 1.0), (42.2, 1.3)]
+for x0, d in stages:
+    fx.put(bp(noise(int(d * SR)), 1500, 6000) * np.hanning(int(d * SR)) * (0.6 + 0.4 * np.sin(np.arange(int(d * SR)) / SR * 40) ** 2), x0, -14, 0.3); ev("diagram ink stroke", x0)
+for i, x in enumerate(np.arange(42.0, 44.4, 0.3)): fx.put(whoosh(0.35, 800, 5000, 0.5), x, -20, 0.6 * np.sin(i * 1.3))
+ev("consciousness particles", 42.0)
+for i, x in enumerate(np.arange(40.4, 44.2, 0.55)): fx.put(click(5200 - (i % 3) * 700, 0.03), x, -20, -0.4 + 0.2 * (i % 5))
 for x in np.arange(EV["finger"], 47.6, 0.6): fx.put(bp(noise(int(0.5 * SR)), 2000, 7000) * np.hanning(int(0.5 * SR)), x, -26)
 ev("finger on paper", EV["finger"])
 # --- сцена 4
@@ -277,7 +284,7 @@ def load_wav(path):
     return resample_poly(x, SR, sr0)
 VO = os.path.join(HERE, "voice")
 scr = load_wav(os.path.join(VO, "scream_el_alexandr.wav")); scr = scr / (np.max(np.abs(scr)) + 1e-9)
-vox.put(reverb(scr, IR_ROOM, 0.3), EV["scream"] - 0.05, -3); ev("scream (Speko/ElevenLabs)", EV["scream"])
+vox.put(reverb(scr, IR_ROOM, 0.3), EV["scream"] - 0.05, 4); ev("scream (Speko/ElevenLabs)", EV["scream"])
 fx.put(reverb(scream(0.9), IR_ROOM, 0.35), EV["scream"], -20)
 for x in (69.1, 69.9): fx.put(thud(75, 0.35, 700), x, -6);
 ev("heavy steps", 69.1)

@@ -26,5 +26,5 @@ export const EV = {
   metal: 55.6, eyes: 57.0, grin: 58.6, palm: 62.4, critical: 63.2,
   jumpBack: 66.05, grab: 67.4, scream: 67.9, swingUp: 70.4, impact: 72.95,
   liquid: 73.0, claw: 75.0, grabWrist: 75.8, pull: 76.6,
-  calm: 81.0, sleeves: 81.8, hair: 83.1, turn: 85.3, glint: 86.25, whisper: 86.42, cut: 87.8, title1: 88.0, title2: 88.7,
+  calm: 81.0, sleeves: 81.8, hair: 83.1, turn: 85.3, glint: 86.25, whisper: 86.42, cut: 87.8, title1: 88.0, title2: 88.4,
 };

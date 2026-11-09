@@ -207,7 +207,7 @@ function fingerTip(k: number): V3 {
   const F = FOLDER_REF; if (!F) return [1.45, BENCH.y, 0.1];
   const uy = [1662, 1718, 1774]; const L = 3 * (1420 - 118);
   let d = k * L; let line = Math.min(2, Math.floor(d / (1420 - 118))); const x = 118 + (d - line * (1420 - 118));
-  const p = F.paperToWorld(Math.min(x, 1420), uy[line] + 8);
+  const p = F.paperToWorld(Math.min(x, 1420), uy[line] - 24);
   return [p.x, p.y + 0.004, p.z];
 }
 
@@ -263,7 +263,7 @@ function doubleFace(t: number): CS {
   s.head = [-2, 0, keys(u, [[0, 17], [2.5, 9], [6, 4]])]; s.neck = [0, 0, 3];
   // правая рука прижимается ладонью к стеклу (изнутри)
   const k = smooth(seg(t, EV.palm - 1.2, EV.palm));
-  const palmC: V3 = [0.155, 1.6, 0.013];
+  const palmC: V3 = [0.125, 1.585, 0.013];
   const wr: V3 = [palmC[0], palmC[1] - 0.085, palmC[2] + 0.025];
   const foldR = { t: [0.08, 1.27, 0.19] as V3, fwd: [1, 0.15, 0.1] as V3, back: [0, 0.6, 0.8] as V3, pole: [-0.9, -0.5, -0.2] as V3 };
   const pressed = { t: toLocal(s, wr), fwd: dirLocal(s, [0.05, 1, 0]), back: dirLocal(s, [0, 0, 1]), pole: [-0.8, -0.6, 0.2] as V3 };
@@ -301,8 +301,8 @@ function heroAttack(t: number): CS {
   if (u < 1.05) {
     // защитная поза: руки вверх
     const k = smooth(seg(u, 0.05, 0.4)) * (1 - smooth(seg(u, 0.7, 1.05)));
-    s.armL = { t: lerpV(restArm("L").t, [0.2, 1.42, 0.25], k), fwd: lerpV(restArm("L").fwd, [0, 1, 0.3], k), back: lerpV(restArm("L").back, [0, 0, -1], k), pole: [0.6, -0.7, -0.3] };
-    s.armR = { t: lerpV(restArm("R").t, [-0.2, 1.42, 0.25], k), fwd: lerpV(restArm("R").fwd, [0, 1, 0.3], k), back: lerpV(restArm("R").back, [0, 0, -1], k), pole: [-0.6, -0.7, -0.3] };
+    s.armL = { t: lerpV(restArm("L").t, [0.18, 1.22, 0.22], k), fwd: lerpV(restArm("L").fwd, [0, 1, 0.3], k), back: lerpV(restArm("L").back, [0, 0, -1], k), pole: [0.6, -0.7, -0.3] };
+    s.armR = { t: lerpV(restArm("R").t, [-0.18, 1.22, 0.22], k), fwd: lerpV(restArm("R").fwd, [0, 1, 0.3], k), back: lerpV(restArm("R").back, [0, 0, -1], k), pole: [-0.6, -0.7, -0.3] };
     s.fingL = mixHand(HANDS.relaxed, HANDS.flat, k); s.fingR = s.fingL;
   } else if (u < 2.6) {
     const reach = smooth(seg(u, 1.2, 1.75)) * (1 - smooth(seg(u, 2.0, 2.6)));
@@ -316,7 +316,7 @@ function heroAttack(t: number): CS {
     const up = smooth(seg(u, 4.4, 5.6));
     const sw = inCubic(seg(u, 6.3, 6.95));
     const carry: V3 = [-0.24, 1.08, 0.22];
-    const over: V3 = [-0.14, 1.98, -0.06];
+    const over: V3 = [-0.34, 1.86, -0.04];
     const hit: V3 = toLocal(s, [0.25, 1.43, 0.24]);
     const t1 = lerpV(carry, over, up);
     const tr = sw > 0 ? lerpV(over, hit, sw) : t1;
@@ -351,14 +351,14 @@ function wrenchInHand(E: Engine) {
 
 // ------------------------------------------------------------------ сцена 5b: жидкое стекло (слоумо)
 const IMPACT: V3 = [0.0, 1.35, 0.0];
-const tauOf = (u: number) => (u < 4.5 ? u * 0.22 : 0.99 + (u - 4.5) * 0.3);
+const tauOf = (u: number) => (u < 4.6 ? u * 0.2 : 0.92 + (u - 4.6) * 0.5);
 function heroSink(tau: number, t: number): CS {
   const s = stand(0.13, 0.46, 182);
   s.spine = [18, 0, 0]; s.chest = [12, -12, 0]; s.head = [6, 0, 0];
   // кисть: от удара тонет к стеклу, потом утягивается внутрь
   const sinkK = smooth(clamp01(tau / 0.6));
-  const pull = smooth(clamp01((tau - 0.8) / 1.1));
-  const w: V3 = [0.26 - 0.18 * sinkK - 0.02 * pull, 1.43 - 0.08 * sinkK - 0.02 * pull, 0.24 - 0.14 * sinkK - 0.22 * pull];
+  const pull = smooth(clamp01((tau - 0.72) / 0.9));
+  const w: V3 = [0.26 - 0.18 * sinkK - 0.02 * pull, 1.43 - 0.08 * sinkK - 0.03 * pull, 0.24 - 0.14 * sinkK - 0.42 * pull];
   armW(s, "R", w, nrm([-0.3, 0.3, -1]), nrm([0, 1, 0.2]), [-0.8, 0.2, -0.4]);
   s.fingR = HANDS.grip;
   s.armL = { t: [0.26, 1.0, -0.05], fwd: [0.1, -1, 0.1], back: [1, 0, 0], pole: [0.7, -0.6, -0.4] };
@@ -394,14 +394,14 @@ function imposter(t: number): CS {
 function imposterTurn(t: number): CS {
   const u = t - 85.2;
   const s = stand(0.02, 0.70, 180);
-  const k = smoother(seg(u, 0.1, 0.95));
+  const k = smoother(seg(u, 0.05, 1.08));
   s.head = [keys(u, [[0, 0], [0.5, -3], [1, 0]]), -78 * k, 0]; s.neck = [0, -14 * k, 0]; s.chest = [0, -10 * k, 0];
   s.gaze = [0.6, 1.69, 0.70];
   if (u < 0.6) s.gaze = [0.02 + (0.6 - 0.02) * k, 1.69, 0.2 + 0.5 * k];
   // «Ты следующий» — по огибающей шёпота (sound/sfx.py → lipsync.json)
   const li = Math.round((t - (LIP as any).start) * 60);
   const fr = (LIP as any).frames as number[][];
-  if (li >= 0 && li < fr.length) { s.morph.jaw = fr[li][1]; s.morph.pucker = fr[li][2]; }
+  if (li >= 0 && li < fr.length) { s.morph.jaw = fr[li][1] * 0.45; s.morph.pucker = fr[li][2] * 0.7; }
   return s;
 }
 
@@ -429,8 +429,9 @@ export function direct(E: Engine, f: number): Hud {
       const k = smooth(u / 6);
       const cp: V3 = [0.05 - 0.05 * k + wob(t * 0.3, 1) * 0.01, 1.18 + wob(t * 0.25, 2) * 0.008, 3.35 - 0.42 * k];
       cam(E, cp, [0.0, 1.13, 0], 54);
-      P.focus = cp[2] - 0.05; P.aperture = 7; P.edgeBlur = 9; P.vol = 0.09; P.grain = 0.06; P.exposure = 1.05;
-      P.black = 1 - smooth(seg(u, 0, 1.2));
+      P.focus = cp[2] - 0.05; P.aperture = 7; P.edgeBlur = 9; P.vol = 0.11; P.grain = 0.06; P.exposure = 1.32;
+      P.black = 1 - smooth(seg(u, 0, 0.35));
+      E.world.fill.intensity = 1.2; E.world.amb.intensity = 0.2;
       hud.plate = clamp01((t - EV.plate) / 0.5) * (1 - clamp01((t - 5.5) / 0.4));
       break;
     }
@@ -527,7 +528,7 @@ export function direct(E: Engine, f: number): Hud {
       // силуэт проступает сквозь шум
       const sil = seg(t, EV.silhouette, EV.silhouette + 0.3) * (1 - seg(t, EV.silhouette + 1.0, EV.silhouette + 1.3));
       const flick = hash(f * 0.37) > 0.35 ? 1 : 0.15;
-      E.entityRim.value = sil * flick * 1.2;
+      E.entityRim.value = sil * flick * 2.6;
       E.entity.visible = sil > 0.01 || hash(f * 1.7) > 0.93 && t > EV.redFrame;
       if (!E.entity.visible) E.entityRim.value = 0;
       P.grain = 0.06 + 0.12 * sil + 0.04 * seg(t, EV.redFrame, EV.redFrame + 0.3);
@@ -604,23 +605,24 @@ export function direct(E: Engine, f: number): Hud {
       apply(E.hero, heroStill(t));
       apply(E.double, doubleWalk(t));
       const k = smooth(u / 7);
-      cam(E, [0.34 - 0.04 * k + wob(t * 0.4, 1) * 0.004, 1.64 + wob(t * 0.35, 2) * 0.003, 1.95 - 0.12 * k], [-0.08, 1.42 - 0.04 * k, 0], 33);
+      cam(E, [0.36 - 0.04 * k + wob(t * 0.4, 1) * 0.004, 1.6 + wob(t * 0.35, 2) * 0.003, 2.05 - 0.12 * k], [0.02, 1.2 - 0.04 * k, 0], 40);
       const dz = E.double.root.position.z;
       P.focus = Math.hypot(0.34, 0.0, 1.95 - 0.12 * k + dz); P.aperture = 10; P.edgeBlur = 7; P.vol = 0.05;
-      hud.desync = { a: 1, x: 590, y: 400, val: lerp(0.48, 3.4, seg(u, 0.4, 7)), warn: seg(u, 3, 7) };
+      hud.desync = { a: 1, x: 60, y: 300, val: lerp(0.48, 3.4, seg(u, 0.4, 7)), warn: seg(u, 3, 7) };
       mu.uGlow.value.setRGB(0, 0.012 * seg(u, 3, 7), 0.014 * seg(u, 3, 7));
       break;
     }
     case "s4b": {
       E.double.root.visible = true;
       apply(E.double, doubleFace(t));
-      E.double.teeth.visible = true;
+      E.double.teeth.visible = false;
       E.double.U.uMetal.value = smooth(seg(t, EV.metal, EV.metal + 1.6));
       E.double.U.uWet.value = 0.5 * smooth(seg(t, EV.metal, EV.metal + 1.6));
       E.double.EU.uMetal.value = smooth(seg(t, EV.eyes, EV.eyes + 1.2)); E.double.EU.uSil.value = smooth(seg(t, EV.eyes + 0.6, EV.eyes + 1.5));
       const k = smooth(u / 11);
-      cam(E, [0.025 + wob(t * 0.3, 1) * 0.003, 1.695 + wob(t * 0.3, 2) * 0.002, 0.45 - 0.07 * k], [0.0, 1.665, -0.3], 30);
-      P.focus = 0.45 - 0.07 * k + 0.075; P.aperture = 13; P.maxCoc = 22; P.edgeBlur = 8; P.vol = 0.0;
+      const pb = smooth(seg(t, EV.palm - 0.9, EV.palm + 0.3));
+      cam(E, [0.025 + 0.03 * pb + wob(t * 0.3, 1) * 0.003, 1.695 - 0.03 * pb + wob(t * 0.3, 2) * 0.002, 0.45 - 0.07 * k + 0.08 * pb], [0.04 * pb, 1.65, -0.3], 30 + 9 * pb);
+      P.focus = 0.45 - 0.07 * k + 0.08 * pb + 0.075; P.aperture = 13; P.maxCoc = 22; P.edgeBlur = 8; P.vol = 0.0;
       const crit = seg(t, EV.critical, EV.critical + 0.1);
       hud.desync = { a: 1, x: 140, y: 1500, val: lerp(3.4, 5.0, smooth(seg(t, 55, EV.critical))), warn: 1, crit, blink: crit > 0 ? (Math.floor((t - EV.critical) * 4) % 2) : 0 };
       mu.uGlow.value.setRGB(0.02 * crit * (0.6 + 0.4 * Math.sin(t * 9)), 0.0, 0.004 * crit);
@@ -631,7 +633,7 @@ export function direct(E: Engine, f: number): Hud {
       break;
     }
     case "s5a": {
-      E.hero.root.visible = true; E.double.root.visible = true;
+      E.hero.root.visible = true; E.double.root.visible = true; E.useContact = true;
       const hs = heroAttack(t); apply(E.hero, hs);
       const ds = doubleFace(Math.min(t - 66 + EV.palm + 1.5, 64.5)); ds.morph.grin = 1; apply(E.double, ds);
       E.double.teeth.visible = true; E.double.U.uMetal.value = 1; E.double.EU.uMetal.value = 1; E.double.EU.uSil.value = 1;
@@ -657,7 +659,7 @@ export function direct(E: Engine, f: number): Hud {
       E.wrench.visible = true; wrenchInHand(E);
       // жидкость
       mu.uRipple.value.set(IMPACT[0], IMPACT[1] - GC, tau, 1.0);
-      const clawT = tau - 0.45;
+      const clawT = tau - 0.42;
       mu.uRipple2.value.set(0.07, 1.27 - GC, Math.max(0, clawT), clawT > 0 ? 0.8 : 0);
       mu.uLiquid.value = 1;
       // рука из стекла хватает запястье
@@ -671,24 +673,31 @@ export function direct(E: Engine, f: number): Hud {
       E.claw.root.position.copy(tip);
       E.claw.root.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir);
       E.claw.root.rotateZ(Math.PI * 0.55);
-      E.claw.grip(smooth(clamp01((clawT - 0.15) / 0.14)), 10 * (1 - reachK));
+      E.claw.grip(smooth(clamp01((clawT - 0.15) / 0.14)), 10 * (1 - reachK)); E.claw.root.scale.setScalar(1.25);
       E.claw.U.uWet.value = 1;
       E.drops.mesh.visible = true; E.drops.smoke.visible = true; E.drops.update(tau, v3(IMPACT).add(new THREE.Vector3(0, 0, 0.02)), 1);
       const k = smooth(u / 8);
-      const w2 = smooth(seg(u, 4.4, 8));
-      cam(E, [-0.24 - 0.05 * w2, 1.42 - 0.02 * k + 0.02 * w2, 0.36 + 0.02 * k + 0.05 * w2], [0.04 - 0.02 * w2, 1.33, 0.03 - 0.03 * w2], 36 + 4 * w2);
-      P.focus = E.cam.position.distanceTo(new THREE.Vector3(0.04, 1.33, 0.04)); P.aperture = 12; P.maxCoc = 22; P.edgeBlur = 8; P.vol = 0.02;
+      const w2 = smooth(seg(u, 4.4, 6));
+      if (u < 6.0) {
+        cam(E, [-0.24 - 0.05 * w2, 1.42 - 0.02 * k + 0.02 * w2, 0.36 + 0.02 * k + 0.05 * w2], [0.04 - 0.02 * w2, 1.33, 0.03 - 0.03 * w2], 36 + 4 * w2);
+        P.focus = E.cam.position.distanceTo(new THREE.Vector3(0.04, 1.33, 0.04)); P.aperture = 12; P.maxCoc = 22; P.edgeBlur = 8; P.vol = 0.02;
+      } else {
+        // вставка: капли ртути шипят на дубовом полу
+        const f2 = smooth(seg(u, 6, 8));
+        cam(E, [-0.02 - 0.04 * f2, 0.085 + 0.01 * f2, 0.98 - 0.05 * f2], [-0.32, 0.0, 0.42], 40);
+        P.focus = E.cam.position.distanceTo(new THREE.Vector3(-0.3, 0.0, 0.45)); P.aperture = 10; P.maxCoc = 20; P.edgeBlur = 8; P.vol = 0.03; P.exposure = 1.5;
+        E.world.key.intensity = 14;
+      }
       mu.uGlow.value.setRGB(0.0, 0.01 * seg(tau, 0, 0.3), 0.012 * seg(tau, 0, 0.3));
       P.flash = 0.12 * Math.exp(-u * 5);
       P.chroma = 2.0;
       break;
     }
     case "s6a": {
-      E.hero.root.visible = true; E.double.root.visible = false;
+      E.hero.root.visible = true; E.double.root.visible = false; E.useContact = true;
       apply(E.hero, imposter(t));
-      E.wrench.visible = true; E.wrench.matrixAutoUpdate = true; E.wrench.position.set(0.42, 0.0092, 0.92); E.wrench.rotation.set(0, -0.9, Math.PI / 2 * 0); E.wrench.rotation.set(Math.PI / 2, 0, -0.9);
-      E.wrench.rotation.set(0, -0.9, 0);
-      mu.uPrints.value.set(0.36, 0.02 + 0.075 * smooth(seg(u, 0, 4.5)), 0, 1);
+      E.wrench.visible = true; E.wrench.matrixAutoUpdate = true; E.wrench.position.set(0.5, 0.0092, 1.15); E.wrench.rotation.set(0, -0.6, 0);
+      mu.uPrints.value.set(0.46, 0.02 + 0.16 * smooth(seg(u, 0, 4.2)), 0, 1);
       mu.uDirt.value = 0.82;
       const k = smooth(u / 4.2);
       cam(E, [0.95 + wob(t * 0.2, 1) * 0.003, 1.22, 3.25 - 0.1 * k], [0.08, 1.02, 0.25], 50);
@@ -703,7 +712,7 @@ export function direct(E: Engine, f: number): Hud {
       const k = smooth(u / 2.6);
       cam(E, [0.6 - 0.04 * k, 1.70, 0.70], [0.0, 1.675, 0.70], 28);
       P.focus = 0.6 - 0.04 * k - 0.07; P.aperture = 11; P.maxCoc = 20; P.edgeBlur = 8; P.vol = 0.0;
-      mu.uPrints.value.set(0.36, 0.1, 0, 1);
+      mu.uPrints.value.set(0.46, 0.2, 0, 1);
       if (t >= EV.cut) P.black = 1;
       break;
     }

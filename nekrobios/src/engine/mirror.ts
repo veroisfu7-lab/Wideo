@@ -34,7 +34,7 @@ vec2 rippleN(vec2 g, vec4 R){
   if (R.w <= 0.0) return vec2(0.0);
   vec2 d = g - R.xy; float r = length(d) + 1e-4;
   float t = R.z; float wave = r - t * 0.55;
-  float a = R.w * exp(-r * 6.0) * exp(-t * 0.9) * smoothstep(0.0, 0.05, t * 0.55 - r + 0.08);
+  float a = R.w * 1.6 * exp(-r * 3.2) * exp(-t * 0.55) * smoothstep(0.0, 0.05, t * 0.55 - r + 0.08);
   float s = cos(wave * 70.0) * a;
   return d / r * s;
 }
@@ -87,18 +87,18 @@ void main(){
   if (uPrints.w > 0.0) {
     for (int k = 0; k < 2; k++) {
       float sx = k == 0 ? -1.0 : 1.0;
-      vec2 c0 = vec2(sx * 0.17 + (k == 0 ? -0.01 : 0.02), uPrints.x + (k == 0 ? 0.0 : 0.06));
+      vec2 c0 = vec2(k == 0 ? 0.12 : 0.33, uPrints.x + (k == 0 ? 0.0 : 0.07));
       float slide = uPrints.y * (k == 0 ? 1.0 : 0.85);
       vec2 c = c0 - vec2(0.0, slide);
       vec2 pp = (g - c) * vec2(sx, 1.0);
       float dp = palm(vec2(pp.x, pp.y) / 1.55) * 1.55;
-      float body = 1.0 - smoothstep(-0.004, 0.004, dp + (vnoise(vec3(g * 200.0, float(k))) - 0.5) * 0.008);
+      float body = 1.0 - smoothstep(-0.005, 0.005, dp + (vnoise(vec3(g * 70.0, float(k))) - 0.5) * 0.006);
       // полосы от пальцев и ладони вверх (след сползания)
       float strip = 0.0;
       for (int j = 0; j < 5; j++) { float fx = c.x + sx * (-0.055 + float(j) * 0.029); float w = 0.009 + 0.005 * vnoise(vec3(float(j), float(k), 1.0));
         strip = max(strip, (1.0 - smoothstep(w * 0.5, w, abs(g.x - fx))) * step(c.y + 0.02, g.y) * step(g.y, c0.y + 0.09) * (1.0 - smoothstep(0.0, slide + 0.05, g.y - c.y)) ); }
       float m = max(body, strip * 0.75) * uPrints.w;
-      float merc = smoothstep(0.45, 0.7, vnoise(vec3(g * 90.0, 7.0 + float(k))));
+      float merc = smoothstep(0.45, 0.7, vnoise(vec3(g * 40.0, 7.0 + float(k))));
       vec3 blood = vec3(0.16, 0.004, 0.006) * (0.6 + 0.6 * lampN);
       vec3 hg = vec3(0.75, 0.8, 0.85) * (0.3 + 1.2 * lampN);
       col = mix(col, mix(blood, hg, merc * 0.45), m * 0.92);

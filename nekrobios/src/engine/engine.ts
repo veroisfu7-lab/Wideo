@@ -27,6 +27,7 @@ export class Engine {
   usePhoneFeed = false;
   phoneScene = new THREE.Scene(); phoneKey = new THREE.PointLight(new THREE.Color('#FFA448'), 3, 4, 2);
   showMirror = true;
+  useContact = false; contact: THREE.Mesh[] = [];
   entityRim = { value: 0.0 };
   claw = new Claw(); drops!: Droplets; folder!: Folder; ragD!: THREE.Mesh; phoneM!: THREE.Group;
   eyeRT = new THREE.WebGLCubeRenderTarget(128, { type: THREE.HalfFloatType }); eyeCam!: THREE.CubeCamera; useEyeCube = false;
@@ -77,7 +78,7 @@ export class Engine {
     this.scene.add(this.hero.root, this.double.root);
 
     // реквизит
-    const iron = metalMat("castiron", "#6a6a70", 0.34);
+    const iron = metalMat("castiron", "#9a9aa2", 0.26);
     this.wrench = new THREE.Mesh(props.geos.wrench, iron); this.wrench.castShadow = true; this.wrench.receiveShadow = true;
     this.clipMat(iron);
     const ragMat = withAO(new THREE.MeshPhysicalMaterial({ color: new THREE.Color(0.86, 0.84, 0.8), roughness: 0.95, sheen: 0.5, sheenColor: new THREE.Color(0.9, 0.88, 0.85) }));
@@ -85,6 +86,7 @@ export class Engine {
       fNormal: `{ float h = vnoise(vLocal * vec3(2500.0, 2500.0, 600.0)) * 0.00015; normal = bumpN(-vViewPosition, normal, h, faceDirection); }` });
     this.rag = new THREE.Mesh(props.geos.rag, ragMat); this.rag.castShadow = true;
     this.ragBench = new THREE.Mesh(props.geos.rag, ragMat); this.ragBench.castShadow = true;
+    props.geos.rag.scale(1, 0.5, 1);
     this.entityMat = withAO(new THREE.MeshPhysicalMaterial({ color: new THREE.Color(0.012, 0.011, 0.012), roughness: 0.85, sheen: 0.6, sheenColor: new THREE.Color(0.12, 0.14, 0.16) })) as THREE.MeshPhysicalMaterial;
     patch(this.entityMat, { key: "entity", uniforms: { uRim: this.entityRim } as any,
       fEnd: `{ float fr = pow(1.0 - clamp(abs(dot(normalize(normal), normalize(vViewPosition))), 0.0, 1.0), 3.0); gl_FragColor.rgb += vec3(0.22, 0.32, 0.42) * fr * uRim; }` });
@@ -94,6 +96,11 @@ export class Engine {
     this.rag.layers.set(LAYER.REAL);
     this.scene.add(this.wrench, this.rag, this.ragBench, this.ragD, this.entity, this.extra);
     await this.claw.init(); this.scene.add(this.claw.root); this.clipMat(this.claw.mat);
+    // контактные тени под ступнями (мягкие пятна)
+    const cm = new THREE.ShaderMaterial({ transparent: true, depthWrite: false,
+      vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `varying vec2 vUv; void main(){ float r = length((vUv - 0.5) * 2.0); gl_FragColor = vec4(0.0, 0.0, 0.0, 0.62 * (1.0 - smoothstep(0.15, 1.0, r))); }` });
+    for (let i = 0; i < 2; i++) { const g = new THREE.PlaneGeometry(0.17, 0.34); g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, cm); m.renderOrder = 3; m.layers.set(LAYER.REAL); this.contact.push(m); this.scene.add(m); }
     this.drops = new Droplets(null); this.drops.mesh.layers.set(LAYER.REAL); this.drops.smoke.layers.set(LAYER.REAL); this.scene.add(this.drops.mesh, this.drops.smoke);
     this.folder = new Folder(); this.scene.add(this.folder.group);
     this.eyeCam = new THREE.CubeCamera(0.03, 20, this.eyeRT);
@@ -164,7 +171,7 @@ export class Engine {
       c.setMorph({ blink: 0, wide: 0, jaw: 0, grin: 0, pucker: 0 }); c.teeth.visible = false;
       c.head.visible = true; c.hair.visible = true; for (const e of c.eyes) e.visible = true; for (const m of c.meshes) if (m !== c.teeth) m.visible = true;
     }
-    this.extra.clear();
+    this.extra.clear(); this.useContact = false;
     this.claw.root.visible = false; this.drops.mesh.visible = false; this.drops.smoke.visible = false; this.folder.group.visible = false;
     this.ragD.visible = false; this.phoneM.visible = false; this.entityRim.value = 0; this.rag.matrixAutoUpdate = true; this.ragD.matrixAutoUpdate = true; this.wrench.matrixAutoUpdate = true; this.phone.matrixAutoUpdate = true; this.phoneM.matrixAutoUpdate = true; this.useEyeCube = false; this.entity.layers.set(LAYER.MIRROR);
     this.wrench.layers.set(LAYER.BOTH);
@@ -180,6 +187,13 @@ export class Engine {
   render() {
     const r = this.r;
     this.scene.updateMatrixWorld(true);
+    this.contact.forEach((m, i) => {
+      m.visible = this.useContact && this.hero.root.visible;
+      if (!m.visible) return;
+      const p = this.hero.worldPos(i ? "foot.R" : "foot.L"); const q = this.hero.worldPos(i ? "toe" in this.hero.bones ? "toe" : "foot.R" : "foot.L");
+      void q; m.position.set(p.x, 0.003, p.z + 0.05); m.rotation.y = this.hero.root.rotation.y; m.updateMatrixWorld(true);
+      const h = Math.max(0, p.y - 0.088); (m.material as THREE.ShaderMaterial).opacity = 1; m.scale.setScalar(1 + h * 3);
+    });
     this.cam.updateMatrixWorld(true);
     this.cam.layers.set(LAYER.BOTH); this.cam.layers.enable(LAYER.REAL);
     r.shadowMap.needsUpdate = true;
@@ -194,9 +208,16 @@ export class Engine {
     else this.mirror.glass.visible = false;
     r.setRenderTarget(this.post.sceneRT);
     r.setClearColor(0x000000, 1); r.clear(true, true, true);
+    if (this.phone.visible && this.usePhoneFeed) {
+      // лента камеры телефона: сцена без героя (камера телефона смотрит от него)
+      const hv = this.hero.root.visible; this.hero.root.visible = false;
+      r.render(this.scene, this.cam);
+      this.copy(this.post.sceneRT.texture, this.feedRT);
+      this.hero.root.visible = hv;
+      r.setRenderTarget(this.post.sceneRT); r.clear(true, true, true);
+    }
     r.render(this.scene, this.cam);
     if (this.phone.visible) {
-      if (this.usePhoneFeed) { this.copy(this.post.sceneRT.texture, this.feedRT); r.setRenderTarget(this.post.sceneRT); }
       r.autoClear = false;
       this.phoneScene.environment = this.scene.environment;
       r.render(this.phoneScene, this.cam);

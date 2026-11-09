@@ -206,6 +206,7 @@ export class Folder {
     }
     this.group.add(this.back, this.paper, this.coverPivot);
     this.group.traverse((o) => o.layers.set(LAYER.BOTH));
+    this.drawPaper(0, 0, 0, 0);
   }
 
   drawPaperBase() {

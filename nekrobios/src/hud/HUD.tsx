@@ -102,9 +102,9 @@ const PhoneOverlay: React.FC<{ p: any; t: number }> = ({ p }) => {
         <div style={{ position: "absolute", bottom: 74 * s, left: 0, right: 0, textAlign: "center", fontSize: 11 * s, color: "rgba(255,255,255,0.85)" }}>0,5   <b>1×</b>   3</div>
       </div>
       {box && p.label > 0 && (
-        <div style={{ position: "absolute", left: box[0] - 30 * s, top: box[1] - 44 * s, padding: `${4 * s}px ${8 * s}px`, borderRadius: 7 * s, background: "rgba(10,30,18,0.65)", border: `1px solid ${NEON.green}`,
-          fontFamily: F.code, fontSize: 9.5 * s, color: NEON.green, whiteSpace: "nowrap", opacity: p.label }}>
-          [ ОБЪЕКТ 01: АРТЕМ ] • СОВПАДЕНИЕ: 99.8%
+        <div style={{ position: "absolute", left: minX + 10 * s, right: 1080 - maxX + 10 * s, top: Math.max(minY + 34 * s, box[1] - 62 * s), padding: `${5 * s}px ${7 * s}px`, borderRadius: 8 * s, background: "rgba(8,26,16,0.72)", border: `1.5px solid ${NEON.green}`,
+          fontFamily: F.code, fontSize: 13.5 * s, lineHeight: 1.25, color: NEON.green, textAlign: "center", fontWeight: 700, opacity: p.label }}>
+          [ ОБЪЕКТ 01: АРТЕМ ]<br />СОВПАДЕНИЕ: 99.8%
         </div>
       )}
     </div>
@@ -145,8 +145,8 @@ const PhoneFull: React.FC<{ p: any; t: number; frame: number }> = ({ p, frame })
         )}
       </svg>
       {g > 0 && (
-        <div style={{ position: "absolute", left: fb[0] - 40, top: fb[1] - 120, padding: "8px 14px", borderRadius: 12, background: "rgba(10,30,18,0.6)", border: `1.5px solid ${NEON.green}`, fontFamily: F.code, fontSize: 24, color: NEON.green, opacity: g, whiteSpace: "nowrap" }}>
-          [ ОБЪЕКТ 01: АРТЕМ ] • 99.8%
+        <div style={{ position: "absolute", left: Math.max(40, fb[0] - 60), top: fb[1] - 150, padding: "8px 14px", borderRadius: 12, background: "rgba(10,30,18,0.6)", border: `1.5px solid ${NEON.green}`, fontFamily: F.code, fontSize: 26, lineHeight: 1.3, color: NEON.green, opacity: g, whiteSpace: "nowrap", fontWeight: 700 }}>
+          [ ОБЪЕКТ 01: АРТЕМ ]<br />СОВПАДЕНИЕ: 99.8%
         </div>
       )}
       {r > 0 && (
